@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "209716118926",
+    "project_id": "porteiroeletronico-sel0373",
+    "storage_bucket": "porteiroeletronico-sel0373.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:209716118926:android:70d45d1bf1159e0bc590df",
+        "android_client_info": {
+          "package_name": "com.example.sel0373"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "209716118926-bh6llmmc118nu6g8fomc0gnep8qd0pra.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB8i8tEFjBhNYJXDIg1v67risppWb1QRAI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "209716118926-bh6llmmc118nu6g8fomc0gnep8qd0pra.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
