@@ -9,14 +9,14 @@ initialize_app(cred, {'storageBucket': 'porteiroeletronico-sel0373.appspot.com'}
 db = firestore.client()
 collection = db.collection('places')
 
-def captura_imagem(token): #capturar a imagem
+def captura_imagem(token, name): #capturar a imagem
     vid = cv2.VideoCapture(0)     
     time.sleep(1)
     _, imagem = vid.read()
     vid.release()
 
     if token == 1:
-        file_name = "teste.jpg"
+        file_name = f"{name}.jpg"
     else:
         file_name = "video.jpg"
 
@@ -31,23 +31,28 @@ def upload_and_get_url(fileName): #passa um arquivo e faz upload
     return blob.public_url
 
 def cadastro(): #função de cadastro
-    image_name = "teste.jpg"
-    captura_imagem(1)
     name = input("Digite o nome de cadastro:")
+    image_name = f"{name}.jpg"
+    captura_imagem(1, name)
     url = upload_and_get_url(image_name)
     os.remove(image_name)
-    db.collection(u'cadastros').add({u'name': name , u'foto': url}) #.add() é sem id
+    db.collection(u'cadastros').document(name).set({u'name': name , u'foto': url}) #.add() é sem id
     return print("cadastro concluido com sucesso")
 
 def real_time_image(): #função para ficar capturando a imagem e ficar enviando para a coleção "video" que será mostrada no site
     image_name = "video.jpg"
-    imagem = captura_imagem(2) #usa a função captura a imagem
+    imagem = captura_imagem(2,"") #usa a função captura a imagem
     url = upload_and_get_url(image_name) #usa a função de guardar a imagem e obter a url
     os.remove(image_name)
     db.collection(u'video').document(u'imagem').set({u'name': "video" , u'foto': url}) #joga a imagem na coleação
     return
 
-cadastro()
+def remover(name): #remover do storage e do firestore, o nome da pessoa é passado e o arquivo é removido
+    db.collection(u"cadastros").document(name).delete()
+    bucket = storage.bucket()
+    blob = bucket.blob(name + ".jpg")
+    blob.delete()
+    return print("cadastro e imagem removidas com sucesso")
 
 ##########LINKS UTEIS##############
 #https://firebase.google.com/s/results/?q=db%20collection
