@@ -1,3 +1,5 @@
+import cv2
+import time
 from firebase_admin import credentials, initialize_app, storage, firestore
 
 # Init firebase with your credentials
@@ -6,19 +8,27 @@ initialize_app(cred, {'storageBucket': 'porteiroeletronico-sel0373.appspot.com'}
 db = firestore.client()
 collection = db.collection('places')
 
-name = "maciel" #aqui tem que puxar o módulo de pegar o nome de quem vai ser cadastrado
-image = "maciel.jpg" #aqui tem que chamar o módulo de tirar a foto da pessoa ou algo do tipo
+def captura_imagem(): #capturar a imagem
+    vid = cv2.VideoCapture(0)     
+    time.sleep(1)
+    _, imagem = vid.read()
+    vid.release()
+    cv2.imwrite("teste.jpg", imagem)
+    return 
 
-def upload_and_get_url(fileName): #pass a file and upload to storage and get the url
+def upload_and_get_url(fileName): #passa um arquivo e faz upload
     bucket = storage.bucket()
     blob = bucket.blob(fileName)
     blob.upload_from_filename(fileName)
     blob.make_public()
     return blob.public_url
 
-def cadastro(image, name):
+def cadastro(): #função de cadastro
+    captura_imagem()
+    name = input("Digite o nome de cadastro:")
+    image = "teste.jpg"
     url = upload_and_get_url(image)
     update_time, city_ref = db.collection(u'cadastros').add({u'name': name , u'foto': url}) #.add() é sem id
-    print("cadastro concluido com sucesso")
+    return print("cadastro concluido com sucesso")
 
-cadastro(image, name)
+cadastro()
