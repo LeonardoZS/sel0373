@@ -2,12 +2,31 @@ import cv2
 import time
 from firebase_admin import credentials, initialize_app, storage, firestore 
 import os 
+import pyrebase
+import face_recognition
+
+#configs
+config = {
+    "apiKey": "AIzaSyBfUkVDBCibf23ZyeVxB_8UYnDlhVularg",
+    "authDomain": "porteiroeletronico-sel0373.firebaseapp.com",
+    "databaseURL" : "gs://porteiroeletronico-sel0373.appspot.com/",
+    "projectId": "porteiroeletronico-sel0373",
+    "storageBucket": "porteiroeletronico-sel0373.appspot.com",
+    "messagingSenderId": "209716118926",
+    "appId": "1:209716118926:web:1311b757a0c27ed3c590df",
+    "serviceAccount": "key.json"
+  }
+
 
 # Init firebase with your credentials
-cred = credentials.Certificate("Cadastro/key.json") #tem que baixar a chave e deixar na mesma pasta do arquivo ou então mudar o caminho
-initialize_app(cred, {'storageBucket': 'porteiroeletronico-sel0373.appspot.com'}) #inicializa no nosso banco de dados
+cred = credentials.Certificate("key.json")     #tem que baixar a chave e deixar na mesma pasta do arquivo ou então mudar o caminho
+initialize_app(cred, {'storageBucket': 'porteiroeletronico-sel0373.appspot.com'})   #inicializa no nosso banco de dados
 db = firestore.client()
-#collection = db.collection('places') 
+
+#talvez dê conflitos
+firebase = pyrebase.initialize_app(config)
+storage = firebase.storage()
+
 
 def ler_token():
 
@@ -32,10 +51,10 @@ def captura_imagem(token, name): #capturar a imagem
     _, imagem = vid.read()
     vid.release()
 
-    if token == 1:                  #se token = 1 -> cadastro de usuário
+    if token == 1:               #se token = 1 -> cadastro de usuário
         file_name = f"{name}.jpg"
     else:
-        file_name = "video.jpg" # se tokem != ! -> ta enviando uma imagem do video
+        file_name = "video.jpg"  #se tokem != ! -> ta enviando uma imagem do video
 
     cv2.imwrite(file_name, imagem)
     return 
@@ -70,7 +89,26 @@ def remover(name): #remover do storage e do firestore, o nome da pessoa é passa
     blob.delete() #remove o blob com o nome da imagem
     return print("cadastro e imagem removidas com sucesso")
 
-ler_token()
+def download_images(): #função para baixar as imagens do storage
+    files = storage.list_files() #pega o nome das imagens no storage
+    os.mkdir("images") #cria uma fold pra armazenar as imagens
+    for file in files:
+        storage.child(file.name).download(file.name,f"images/{file.name}")
+    os.remove("images/video.jpg")
+
+def reconhecimento(): #aqui ainda n ta funcionando
+    foto_acesso = "teste.jpg"
+    download_images()
+
+    for image in "images/":
+        cadastro_encoding = face_recognition.face_encodings(image)[0]
+        acesso_encoding = face_recognition.face_encodings(foto_acesso)[0]
+        results = face_recognition.compare_faces([cadastro_encoding], acesso_encoding)
+
+    return results
+
+reconhecimento()
+
 
 ##########LINKS UTEIS##############
 #https://firebase.google.com/s/results/?q=db%20collection
