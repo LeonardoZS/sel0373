@@ -17,7 +17,6 @@ config = {
     "serviceAccount": "key.json"
   }
 
-
 # Init firebase with your credentials
 cred = credentials.Certificate("key.json")     #tem que baixar a chave e deixar na mesma pasta do arquivo ou então mudar o caminho
 initialize_app(cred, {'storageBucket': 'porteiroeletronico-sel0373.appspot.com'})   #inicializa no nosso banco de dados
@@ -26,7 +25,6 @@ db = firestore.client()
 #talvez dê conflitos
 firebase = pyrebase.initialize_app(config)
 storage = firebase.storage()
-
 
 def ler_token():
 
@@ -96,19 +94,36 @@ def download_images(): #função para baixar as imagens do storage
         storage.child(file.name).download(file.name,f"images/{file.name}")
     os.remove("images/video.jpg")
 
-def reconhecimento(): #aqui ainda n ta funcionando
-    foto_acesso = "teste.jpg"
-    download_images()
 
-    for image in "images/":
-        cadastro_encoding = face_recognition.face_encodings(image)[0]
-        acesso_encoding = face_recognition.face_encodings(foto_acesso)[0]
-        results = face_recognition.compare_faces([cadastro_encoding], acesso_encoding)
+#precis testar e avaliar as 2 funções a seguir ----------------
+def known_face_encodings(directory):
+    encodings = {}
+    for filename in os.listdir(directory):
+        if filename.endswith('.jpg') or filename.endswith('.png'):
+            image_path = os.path.join(directory, filename)
+            image = face_recognition.load_image_file(image_path)
+            encodings[filename.split('.')[0]] = face_recognition.face_encodings(image)[0]
+    return encodings
 
-    return results
+def reconhecimento():
+    image = face_recognition.load_image_file("teste.jpg")
+    face_locations = face_recognition.face_locations(image) 
+    face_encodings = face_recognition.face_encodings(image, face_locations)
 
-reconhecimento()
+    encodings = known_face_encodings("images")
 
+    # Comparar cada rosto encontrado com os rostos conhecidos
+    for face_encoding in face_encodings:
+        matches = face_recognition.compare_faces(list(encodings.values()), face_encoding)
+    
+        # Procurar entre as faces conhecidas para ver se alguma é uma correspondência
+        if True in matches:
+            matched_index = matches.index(True)
+            name = list(encodings.keys())[matched_index]
+            return name
+    return "Desconhecido"
+
+print(reconhecimento())
 
 ##########LINKS UTEIS##############
 #https://firebase.google.com/s/results/?q=db%20collection
