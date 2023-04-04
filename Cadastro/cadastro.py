@@ -74,6 +74,7 @@ def cadastro(name): #função de cadastro
 
 def real_time_image(): #função para ficar capturando a imagem e ficar enviando para a coleção "video" que será mostrada no site
     image_name = "video.jpg"   
+    remover(image_name)
     imagem = captura_imagem(2,"") #usa a função captura a imagem
     url = upload_and_get_url(image_name) #usa a função de guardar a imagem e obter a url
     os.remove(image_name) #remover a imagem que foi salva
@@ -123,7 +124,7 @@ def reconhecimento():
             return name
     return "Desconhecido"
 
-print(reconhecimento())
+real_time_image()
 
 ##########LINKS UTEIS##############
 #https://firebase.google.com/s/results/?q=db%20collection
