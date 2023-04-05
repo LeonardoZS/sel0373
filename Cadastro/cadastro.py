@@ -4,6 +4,7 @@ from firebase_admin import credentials, initialize_app, storage, firestore
 import os 
 import pyrebase
 import face_recognition
+from datetime import datetime
 
 #configs
 config = {
@@ -24,14 +25,15 @@ db = firestore.client()
 
 #talvez dê conflitos
 firebase = pyrebase.initialize_app(config)
-storage = firebase.storage()
+bucket = storage.bucket()
+#storage = firebase.storage() #ta dando conflito quando usa esse storage (vai ter que mudar o nome, e ver em quais funções ta usando essa)
 
-def ler_token():
+def ler_token(): #funcional: lê o token para cadastro ou remoção
 
     comando_ref = db.collection(u'Token').document(u'token')
     comando_dict = comando_ref.get().to_dict()
     token = comando_dict['token']
-    nome = comando_dict['nome']
+    nome = comando_dict['name']
 
     if token == 1:
         cadastro(nome)
@@ -39,11 +41,11 @@ def ler_token():
     if token == 2:
         remover(nome)
 
-    db.collection(u'Token').document('token').set({u'name': "" , u'token': 0})
+    db.collection(u'Token').document('token').set({u'name': "-" , u'token': 0})
 
     return
 
-def captura_imagem(token, name): #capturar a imagem
+def captura_imagem(token, name): #funcional #capturar a imagem
     vid = cv2.VideoCapture(0)     
     time.sleep(1)
     _, imagem = vid.read()
@@ -51,11 +53,12 @@ def captura_imagem(token, name): #capturar a imagem
 
     if token == 1:               #se token = 1 -> cadastro de usuário
         file_name = f"{name}.jpg"
+        cv2.imwrite(file_name, imagem)
+        return
     else:
-        file_name = "video.jpg"  #se tokem != ! -> ta enviando uma imagem do video
-
-    cv2.imwrite(file_name, imagem)
-    return 
+        file_name = datetime.now().strftime("%Y%m%d_%H%M%S_")+"video.jpg"  #se tokem != ! -> ta enviando uma imagem do video
+        cv2.imwrite(file_name, imagem)
+        return file_name
 
 def upload_and_get_url(fileName): #passa um arquivo e faz upload
     bucket = storage.bucket()
@@ -72,13 +75,14 @@ def cadastro(name): #função de cadastro
     db.collection(u'cadastros').document(name).set({u'name': name , u'foto': url}) #.add() é sem id
     return print("cadastro concluido com sucesso")
 
-def real_time_image(): #função para ficar capturando a imagem e ficar enviando para a coleção "video" que será mostrada no site
-    image_name = "video.jpg"   
-    remover(image_name)
-    imagem = captura_imagem(2,"") #usa a função captura a imagem
-    url = upload_and_get_url(image_name) #usa a função de guardar a imagem e obter a url
-    os.remove(image_name) #remover a imagem que foi salva
-    db.collection(u'video').document(u'imagem').set({u'name': "video" , u'foto': url}) #joga a imagem na coleação
+def real_time_image(): #função para ficar capturando a imagem e ficar enviando para a coleção "video" que será mostrada no site   
+    file_name = captura_imagem(2,"") #usa a função captura a imagem
+    url = upload_and_get_url("images/"+file_name) #usa a função de guardar a imagem e obter a url
+    print(url)
+    os.remove(file_name) #remover a imagem que foi salva
+    img_ref = db.collection(u'video').document(u'VE9Zu3Rn9RD5gDnckf2o')#.set({u'name': "video" , u'foto': url}) #joga a imagem na coleação
+    img_ref.update({"foto": url})
+    print("update realizado")
     return
 
 def remover(name): #remover do storage e do firestore, o nome da pessoa é passado e o arquivo é removido
@@ -94,7 +98,6 @@ def download_images(): #função para baixar as imagens do storage
     for file in files:
         storage.child(file.name).download(file.name,f"images/{file.name}")
     os.remove("images/video.jpg")
-
 
 #precis testar e avaliar as 2 funções a seguir ----------------
 def known_face_encodings(directory):
@@ -124,7 +127,14 @@ def reconhecimento():
             return name
     return "Desconhecido"
 
-real_time_image()
+
+
+#testar a leitura em tempo real
+#while True:
+#    real_time_image()
+#    time.sleep(5)
+#-----------------------------
+
 
 ##########LINKS UTEIS##############
 #https://firebase.google.com/s/results/?q=db%20collection
