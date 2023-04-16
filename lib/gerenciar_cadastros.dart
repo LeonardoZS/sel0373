@@ -8,12 +8,40 @@ class GerenciarCadastros extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Second Route'),
-      ),
-      body: Center(
-        child: UserInformation(),
+    return MaterialApp(
+      home: Stack(
+        children: [
+          Image.asset("assets/images/fundo_certo.jpg",
+              width: double.infinity,
+              height: double.infinity,
+              fit: BoxFit.cover,
+              alignment: Alignment.center),
+          Center(
+              child: Column(children: [
+            // ignore: prefer_const_constructors
+            Text(
+              'Ultimas fotos adicionadas no banco de dados',
+              style: const TextStyle(
+                decoration: TextDecoration.none,
+                height: 2,
+                fontSize: 30,
+                color: Colors.black,
+              ),
+            ),
+            Container(
+                width: MediaQuery.of(context).size.width * 0.9,
+                height: MediaQuery.of(context).size.height * 0.9,
+                decoration: const BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(40),
+                      topRight: Radius.circular(40),
+                      bottomLeft: Radius.circular(40),
+                      bottomRight: Radius.circular(40),
+                    )),
+                child: UserInformation())
+          ])),
+        ],
       ),
     );
   }

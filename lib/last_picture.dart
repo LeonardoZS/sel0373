@@ -4,12 +4,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 //import 'firebase_options.dart';
 import 'package:flutter/material.dart';
 
-class UserInformation extends StatefulWidget {
+class LastPicture extends StatefulWidget {
   @override
-  _UserInformationState createState() => _UserInformationState();
+  State<LastPicture> createState() => _LastPictureState();
 }
 
-class _UserInformationState extends State<UserInformation> {
+class _LastPictureState extends State<LastPicture> {
   final Stream<QuerySnapshot> _usersStream =
       FirebaseFirestore.instance.collection('cadastros').snapshots();
 
@@ -53,13 +53,7 @@ class _UserInformationState extends State<UserInformation> {
           });
         }
 
-        return GridView.count(
-            //primary: false,
-            padding: const EdgeInsets.all(20),
-            crossAxisSpacing: 10,
-            mainAxisSpacing: 1,
-            crossAxisCount: 4,
-            children: getList());
+        return ListView(children: getList());
       },
     );
   }

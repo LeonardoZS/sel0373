@@ -39,7 +39,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Stack(children: [
-      Image.asset("assets/images/fundo.jpg",
+      Image.asset("assets/images/fundo_certo.jpg",
           width: double.infinity,
           height: double.infinity,
           fit: BoxFit.cover,
