@@ -49,6 +49,7 @@ class _LastPictureState extends State<LastPicture> {
             picture.name = map['nome'];
             picture.link = map['foto'];
             print(picture.link);
+            list = [];
             list.add(picture);
           });
         }
@@ -72,10 +73,10 @@ class ShowImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 200,
-      height: 200,
+      width: 400,
+      height: 400,
       child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
-        Container(width: 150, height: 150, child: Image.network(picture.link)),
+        Container(width: 350, height: 350, child: Image.network(picture.link)),
         Text(
           picture.name,
           style: const TextStyle(
