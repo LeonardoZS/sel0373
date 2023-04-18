@@ -27,7 +27,7 @@ class WebTeste extends StatelessWidget {
             child: Column(children: <Widget>[
               // ignore: prefer_const_constructors
               Text(
-                'Ultima foto armazenada no banco de dados',
+                'Foto da portaria',
                 style: const TextStyle(
                   decoration: TextDecoration.none,
                   height: 2,
@@ -80,9 +80,9 @@ class WebTeste extends StatelessWidget {
                       alignment: Alignment.bottomCenter,
                       child: TextButton(
                         style: TextButton.styleFrom(
-                          backgroundColor: Colors.lightBlueAccent,
+                          backgroundColor: Colors.green,
                           elevation: 20,
-                          shadowColor: Colors.lightBlueAccent,
+                          shadowColor: Colors.green,
                         ),
                         // ignore: sort_child_properties_last
                         child: const Text(
