@@ -26,8 +26,8 @@ db = firestore.client()
 #talvez dê conflitos
 firebase = pyrebase.initialize_app(config)
 bucket = storage.bucket()
-#storage = firebase.storage() #ta dando conflito quando usa esse storage (vai ter que mudar o nome, e ver em quais funções ta usando essa)
-
+storage2 = firebase.storage() #ta dando conflito quando usa esse storage (vai ter que mudar o nome, e ver em quais funções ta usando essa)
+#se der erro eu troquei storage pra storage2
 def ler_token(): #funcional: lê o token para cadastro ou remoção
 
     comando_ref = db.collection(u'Token').document(u'token')
@@ -72,7 +72,7 @@ def cadastro(name): #função de cadastro
     captura_imagem(1, name) #tira a foto da imagem, com token = 1 e com o nome passado
     url = upload_and_get_url(image_name) #pega a url a partir da função feita pra isso
     os.remove(image_name) #remover a imagem que foi salva
-    db.collection(u'cadastros').document(name).set({u'name': name , u'foto': url}) #.add() é sem id
+    db.collection(u'cadastros').document().set({u'nome': name , u'foto': url}) #.add() é sem id
     return print("cadastro concluido com sucesso")
 
 def real_time_image(): #função para ficar capturando a imagem e ficar enviando para a coleção "video" que será mostrada no site   
@@ -93,11 +93,11 @@ def remover(name): #remover do storage e do firestore, o nome da pessoa é passa
     return print("cadastro e imagem removidas com sucesso")
 
 def download_images(): #função para baixar as imagens do storage
-    files = storage.list_files() #pega o nome das imagens no storage
+    files = storage2.list_files() #pega o nome das imagens no storage
     os.mkdir("images") #cria uma fold pra armazenar as imagens
     for file in files:
-        storage.child(file.name).download(file.name,f"images/{file.name}")
-    os.remove("images/video.jpg")
+        storage2.child(file.name).download(file.name,file.name)
+    #os.remove("images/video.jpg") #se der erro ta faltando voltar essa linha no caminho certo
 
 #precis testar e avaliar as 2 funções a seguir ----------------
 def known_face_encodings(directory):
@@ -115,7 +115,7 @@ def reconhecimento():
     face_encodings = face_recognition.face_encodings(image, face_locations)
 
     encodings = known_face_encodings("images")
-
+    
     # Comparar cada rosto encontrado com os rostos conhecidos
     for face_encoding in face_encodings:
         matches = face_recognition.compare_faces(list(encodings.values()), face_encoding)
@@ -127,8 +127,7 @@ def reconhecimento():
             return name
     return "Desconhecido"
 
-
-
+cadastro("bruno")
 #testar a leitura em tempo real
 #while True:
 #    real_time_image()
@@ -140,3 +139,5 @@ def reconhecimento():
 #https://firebase.google.com/s/results/?q=db%20collection
 #https://firebase.google.com/docs/firestore/query-data/listen?hl=pt-br
 #https://firebase.google.com/docs/firestore/manage-data/add-data?hl=pt-br
+
+
