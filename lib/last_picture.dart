@@ -11,7 +11,7 @@ class LastPicture extends StatefulWidget {
 
 class _LastPictureState extends State<LastPicture> {
   final Stream<QuerySnapshot> _usersStream =
-      FirebaseFirestore.instance.collection('cadastros').snapshots();
+      FirebaseFirestore.instance.collection('video').snapshots();
 
   List<Picture> list = [];
 

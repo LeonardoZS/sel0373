@@ -7,6 +7,8 @@ import 'package:sel0373/webteste.dart';
 import 'firebase_options.dart';
 import 'package:flutter/material.dart';
 
+import 'package:sel0373/gerenciar_cadastros.dart';
+
 void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
@@ -20,8 +22,16 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        home: Scaffold(
+    return MaterialApp(home: FirstPage());
+  }
+}
+
+class FirstPage extends StatelessWidget {
+  const FirstPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
           backgroundColor: Colors.transparent,
@@ -35,21 +45,57 @@ class MyApp extends StatelessWidget {
           // Important: Remove any padding from the ListView.
           padding: EdgeInsets.zero,
           children: [
-            const DrawerHeader(
-              decoration: BoxDecoration(
+            // ignore: prefer_const_constructors
+            UserAccountsDrawerHeader(
+              decoration: const BoxDecoration(
                 color: Colors.white,
               ),
-              child: Text('Drawer Header'),
+              accountName: const Text(
+                "Leonardo  Silva",
+                style: TextStyle(
+                  color: Colors.black,
+                ),
+              ),
+              accountEmail: const Text(
+                "leonardo@usp.br",
+                style: TextStyle(
+                  color: Colors.black,
+                ),
+              ),
+              currentAccountPicture: const CircleAvatar(
+                radius: 30.0,
+                backgroundImage: NetworkImage(
+                    'https://firebasestorage.googleapis.com/v0/b/porteiroeletronico-sel0373.appspot.com/o/leo.png?alt=media&token=a1af14e8-69ac-4357-ad93-17c82e4c8405'),
+                backgroundColor: Colors.white,
+              ),
             ),
             ListTile(
-              title: const Text('Item 1'),
+              leading: const Icon(
+                Icons.home,
+              ),
+              title: const Text('Portaria'),
               onTap: () {
                 // Update the state of the app.
                 // ...
               },
             ),
             ListTile(
-              title: const Text('Item 2'),
+              title: const Text('Cadastros'),
+              leading: const Icon(
+                Icons.contacts,
+              ),
+              onTap: () {
+                Navigator.of(context).push(
+                    MaterialPageRoute<Null>(builder: (BuildContext context) {
+                  return GerenciarCadastros();
+                }));
+              },
+            ),
+            ListTile(
+              leading: const Icon(
+                Icons.people,
+              ),
+              title: const Text('Desenvolvedores'),
               onTap: () {
                 // Update the state of the app.
                 // ...
@@ -59,7 +105,7 @@ class MyApp extends StatelessWidget {
         ),
       ),
       body: const MyHomePage(title: 'Flutter Demo Home Page'),
-    ));
+    );
   }
 }
 
@@ -76,7 +122,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Stack(children: [
-      Image.asset("assets/images/fundo_certo.jpg",
+      Image.asset("assets/images/agoravai.png",
           width: double.infinity,
           height: double.infinity,
           fit: BoxFit.cover,
@@ -88,7 +134,7 @@ class _MyHomePageState extends State<MyHomePage> {
       //)
       //),
       //Responsive(mobile: MobilePage(), desktop: WebPage()),
-      const WebTeste(),
+      WebTeste(),
       //const WebPage(),
     ]);
   }
