@@ -105,7 +105,7 @@ def known_face_encodings(directory):
     return encodings
 
 def reconhecimento():
-    image = face_recognition.load_image_file("leo.jpg")
+    image = face_recognition.load_image_file("cadastro/leo.jpg")
     face_locations = face_recognition.face_locations(image) 
     face_encodings = face_recognition.face_encodings(image, face_locations)
 
