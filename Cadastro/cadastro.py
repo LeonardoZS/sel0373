@@ -52,7 +52,7 @@ def captura_imagem(token, name): #funcional #capturar a imagem
 
 def upload_and_get_url(fileName): #passa um arquivo e faz upload
     bucket = storage.bucket()
-    blob = bucket.blob(fileName) #cria o blob com o nome do arquivo
+    blob = bucket.blob("cadastro/"+fileName) #cria o blob com o nome do arquivo
     blob.upload_from_filename(fileName) # faz o upload da imagem a partir do filename dela
     blob.make_public() #torna a imagem publica
     return blob.public_url #retorna a url
@@ -82,20 +82,15 @@ def remover(name): #remover do storage e do firestore, o nome da pessoa é passa
     return print("cadastro e imagem removidas com sucesso")
 
 def download_images(): #função para baixar as imagens do storage
-    path = 'images/'
-    blobs = bucket.list_blobs(prefix=path)
-
-# Cria a pasta onde os arquivos serão salvos, se ela ainda não existir
-    if not os.path.exists('images'):
-        os.makedirs('images')
+    blobs = bucket.list_blobs(prefix = 'cadastro/')
+    os.makedirs('cadastro')
 
 # Faz o download de cada arquivo para a pasta de destino
     for blob in blobs:
-        # Define o caminho completo do arquivo de destino, incluindo o nome do arquivo
-        file_path = os.path.join('images', blob.name.replace(path, ''))
-    
-    # Baixa o arquivo para o caminho de destino especificado
-        blob.download_to_filename(file_path)
+        if not blob.name.endswith('/'):
+            filename = blob.name
+            print(filename)
+            blob.download_to_filename(filename)
     #os.remove("images/video.jpg") #se der erro ta faltando voltar essa linha no caminho certo
 
 #precis testar e avaliar as 2 funções a seguir ----------------
@@ -105,15 +100,16 @@ def known_face_encodings(directory):
         if filename.endswith('.jpg') or filename.endswith('.png'):
             image_path = os.path.join(directory, filename)
             image = face_recognition.load_image_file(image_path)
-            encodings[filename.split('.')[0]] = face_recognition.face_encodings(image)[0]
+            if len(face_recognition.face_encodings(image)) >0:
+                encodings[filename.split('.')[0]] = face_recognition.face_encodings(image)[0]
     return encodings
 
 def reconhecimento():
-    image = face_recognition.load_image_file("gabriel.jpg")
+    image = face_recognition.load_image_file("leo.jpg")
     face_locations = face_recognition.face_locations(image) 
     face_encodings = face_recognition.face_encodings(image, face_locations)
 
-    encodings = known_face_encodings("images")
+    encodings = known_face_encodings("cadastro/")
     
     # Comparar cada rosto encontrado com os rostos conhecidos
     for face_encoding in face_encodings:
@@ -154,8 +150,8 @@ def start_firestore_watch():
 firestore_watch_thread = threading.Thread(target=start_firestore_watch)
 firestore_watch_thread.start()
 
-download_images()
-#print(reconhecimento())
+#download_images()
+print(reconhecimento())
 
 
 ##########LINKS UTEIS##############
