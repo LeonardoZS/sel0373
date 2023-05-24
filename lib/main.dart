@@ -5,6 +5,7 @@ import 'package:sel0373/show_img.dart';
 import 'package:sel0373/show_img_2.dart';
 import 'package:sel0373/webpage.dart';
 import 'package:sel0373/webteste.dart';
+import 'authentication.dart';
 import 'firebase_options.dart';
 import 'package:flutter/material.dart';
 
@@ -23,7 +24,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(home: FirstPage());
+    return MaterialApp(home: Authentication());
   }
 }
 
