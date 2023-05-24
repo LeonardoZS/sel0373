@@ -1,12 +1,26 @@
+// ignore_for_file: prefer_const_constructors
+
+import 'dart:typed_data';
+
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:sel0373/main.dart';
 import 'package:sel0373/show_img.dart';
+import 'package:sel0373/adicionar_cadastros.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 class GerenciarCadastros extends StatelessWidget {
   GerenciarCadastros({super.key});
 
   final FirebaseFirestore db = FirebaseFirestore.instance;
+  final storageRef = FirebaseStorage.instance.ref('uploads/');
+
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController phoneController = TextEditingController();
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController dataController = TextEditingController();
+  final String link = 'teste';
 
   void _permiteAcesso() {
     final washingtonRef = db.collection("Token").doc("token");
@@ -77,10 +91,12 @@ class GerenciarCadastros extends StatelessWidget {
                 Icons.contacts,
               ),
               onTap: () {
-                Navigator.of(context).push(
-                    MaterialPageRoute<Null>(builder: (BuildContext context) {
-                  return GerenciarCadastros();
-                }));
+                // Navigator.of(context).push(
+                //      MaterialPageRoute<Null>(builder: (BuildContext context) {
+                //return GerenciarCadastros(novoCadastro: Null,);
+                //  }
+                //  )
+                //  );
               },
             ),
             ListTile(
@@ -89,10 +105,10 @@ class GerenciarCadastros extends StatelessWidget {
               ),
               title: const Text('Desenvolvedores'),
               onTap: () {
-                Navigator.of(context).push(
-                    MaterialPageRoute<Null>(builder: (BuildContext context) {
-                  return GerenciarCadastros();
-                }));
+                // Navigator.of(context).push(
+                //     MaterialPageRoute<Null>(builder: (BuildContext context) {
+                //   return GerenciarCadastros();
+                // }));
               },
             ),
           ],
@@ -162,25 +178,22 @@ class GerenciarCadastros extends StatelessWidget {
                       ),
                       onPressed: () {
                         _permiteAcesso();
+                        _dialogBuilder(
+                            context,
+                            storageRef,
+                            nameController,
+                            dataController,
+                            emailController,
+                            phoneController,
+                            db,
+                            link);
+
+                        //    Navigator.push(
+                        //        context,
+                        //        MaterialPageRoute(
+                        //            builder: (context) => AdicionarCadastro()));
                       },
                     ),
-                    TextButton(
-                      style: TextButton.styleFrom(
-                        backgroundColor: Color.fromARGB(255, 215, 112, 105),
-                        elevation: 20,
-                        shadowColor: Colors.red,
-                      ),
-                      // ignore: sort_child_properrties_last
-                      child: const Text(
-                        'Remover cadastro',
-                        style: TextStyle(
-                          color: Colors.black,
-                        ),
-                      ),
-                      onPressed: () {
-                        _negaAcesso();
-                      },
-                    )
                   ],
                 )
               ],
@@ -191,3 +204,170 @@ class GerenciarCadastros extends StatelessWidget {
     ));
   }
 }
+
+Future<void> _dialogBuilder(
+  BuildContext context,
+  Reference storageRef,
+  TextEditingController nameController,
+  TextEditingController dataController,
+  TextEditingController emailController,
+  TextEditingController phoneController,
+  FirebaseFirestore db,
+  String link,
+) {
+  return showDialog<void>(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        //title: const Text('Basic dialog title'),
+        content: const Text('Insira abaixo os dados para um novo cadastro',
+            style: TextStyle(fontWeight: FontWeight.bold)),
+        actions: <Widget>[
+          // ignore: prefer_const_constructors
+
+          Container(
+            width: MediaQuery.of(context).size.width * 0.3,
+            height: MediaQuery.of(context).size.width * 0.2,
+            child: Column(
+              // ignore: prefer_const_literals_to_create_immutables
+              children: [
+                TextField(
+                  autofocus: true,
+                  controller: nameController,
+                  decoration: InputDecoration(
+                      border: InputBorder.none,
+                      icon: Icon(Icons.person),
+                      hintText: 'Informe o nome completo'),
+                ),
+                TextField(
+                  autofocus: true,
+                  controller: dataController,
+                  decoration: InputDecoration(
+                      border: InputBorder.none,
+                      icon: Icon(Icons.cake),
+                      hintText: 'Insira a data de nascimento'),
+                ),
+                TextField(
+                  autofocus: true,
+                  controller: emailController,
+                  // ignore: prefer_const_constructors
+                  decoration: InputDecoration(
+                      border: InputBorder.none,
+                      // ignore: prefer_const_constructors
+                      icon: Icon(Icons.email),
+                      hintText: 'Insira o email'),
+                ),
+                TextField(
+                  autofocus: true,
+                  controller: phoneController,
+                  decoration: InputDecoration(
+                      border: InputBorder.none,
+                      icon: Icon(Icons.cell_tower),
+                      hintText: 'Informe o telefone'),
+                ),
+                SizedBox(
+                  height: 15,
+                ),
+                TextButton(
+                  style: TextButton.styleFrom(
+                    backgroundColor: Color.fromARGB(255, 229, 230, 229),
+                    elevation: 20,
+                    shadowColor: Color.fromARGB(255, 214, 223, 203),
+                  ),
+                  // ignore: sort_child_properties_last
+                  child: const Text(
+                    'Clique aqui para upar a imagem ',
+                    style: TextStyle(
+                      color: Colors.black,
+                    ),
+                  ),
+                  onPressed: () async {
+                    FilePickerResult? result =
+                        await FilePicker.platform.pickFiles();
+
+                    if (result != null) {
+                      Uint8List? fileBytes = result.files.first.bytes;
+                      String fileName = result.files.first.name;
+                      //print(nameController.text);
+                      await storageRef.child(fileName).putData(
+                          fileBytes!,
+                          SettableMetadata(
+                            contentType: "image/jpeg",
+                          ));
+
+                      link = await storageRef.child(fileName).getDownloadURL();
+
+                      print(link);
+                    }
+                  },
+                ),
+                SizedBox(
+                  height: 15,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    TextButton(
+                      style: TextButton.styleFrom(
+                        textStyle: Theme.of(context).textTheme.labelLarge,
+                      ),
+                      child: const Text('Cancelar'),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                    TextButton(
+                      style: TextButton.styleFrom(
+                        textStyle: Theme.of(context).textTheme.labelLarge,
+                      ),
+                      child: const Text('Cadastrar'),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+
+                        final data = <String, String>{
+                          "nome": nameController.text,
+                          "foto": link,
+                        };
+                        db
+                            .collection("cadastros")
+                            .doc()
+                            .set(data, SetOptions(merge: true));
+                      },
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ],
+      );
+    },
+  );
+}
+
+class NewCadastro {
+  late String name;
+  late String link;
+}
+
+
+
+
+  // class ShowCadastro extends StatelessWidget {
+  //   const ShowCadastro({super.key});
+
+  //   @override
+  //   Widget build(BuildContext context) {
+  //     return   showDialog(
+  //                           context: context,
+  //                           builder: (BuildContext context) {
+  //                             return AlertDialog(
+  //                               title: new Text("Alert!!"),
+  //                               content: new Text("You are awesome!"),
+  //                               actions: ShowCadastro(),
+  //                             );
+  //                           },
+  //                         );;
+  //   }
+  // }

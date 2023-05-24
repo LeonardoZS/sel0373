@@ -1,5 +1,6 @@
 import 'dart:ui';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:sel0373/show_img.dart';
 import 'package:sel0373/show_img_2.dart';
 import 'package:sel0373/webpage.dart';
