@@ -5,7 +5,10 @@ import os
 import pyrebase
 import face_recognition
 from datetime import datetime
-import threading 
+import threading
+
+encodings = {}
+encodings_names = []
 
 #configs
 config = {
@@ -30,18 +33,21 @@ bucket = storage.bucket()
 storage2 = firebase.storage() #ta dando conflito quando usa esse storage (vai ter que mudar o nome, e ver em quais funções ta usando essa)
 #se der erro eu troquei storage pra storage2
 
+
 def captura_imagem(token, name): #funcional #capturar a imagem
     vid = cv2.VideoCapture(0)     
-    time.sleep(1)
+    time.sleep(0.5)
     _, imagem = vid.read()
     vid.release()
-
+    print("ok")
+    
     if token == 1:               #se token = 1 -> cadastro de usuário
         file_name = f"{name}.jpg"
         cv2.imwrite(file_name, imagem)
         return
     else:
         file_name = datetime.now().strftime("%Y%m%d_%H%M%S_")+"video.jpg"  #se tokem != ! -> ta enviando uma imagem do video
+        imagem = cv2.resize(imagem, (0,0), fx=0.5, fy=0.5)
         cv2.imwrite(file_name, imagem)
         return file_name
 
@@ -90,9 +96,9 @@ def download_images(): #função para baixar as imagens do storage
 
 #precis testar e avaliar as 2 funções a seguir ----------------
 def known_face_encodings(directory):
-    encodings = {}
-    for filename in os.listdir(directory):
-        if filename.endswith('.jpg') or filename.endswith('.png'):
+    for filename in os.listdir(directory):        
+        if filename not in encodings_names:
+            encodings_names.append(filename)
             image_path = os.path.join(directory, filename)
             image = face_recognition.load_image_file(image_path)
             if len(face_recognition.face_encodings(image)) >0:
@@ -104,9 +110,9 @@ def reconhecimento():
     image = face_recognition.load_image_file(name)
     face_locations = face_recognition.face_locations(image) 
     face_encodings = face_recognition.face_encodings(image, face_locations)
-
-    encodings = known_face_encodings("cadastro/")
     
+    encodings = known_face_encodings("cadastro/")
+
     # Comparar cada rosto encontrado com os rostos conhecidos
     for face_encoding in face_encodings:
         matches = face_recognition.compare_faces(list(encodings.values()), face_encoding)
@@ -144,13 +150,13 @@ def reconhecimento():
 # Start the Firestore watch in a separate thread
 #firestore_watch_thread = threading.Thread(target=start_firestore_watch)
 #firestore_watch_thread.start()
-
+#download_images()
 
 while True:
+    t3 = time.time()
     print(reconhecimento())
-    
-
-
+    t4 = time.time()
+    print(t4-t3)
 
 #download_images()
 #print(reconhecimento())
