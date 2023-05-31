@@ -30,11 +30,6 @@ bucket = storage.bucket()
 storage2 = firebase.storage() #ta dando conflito quando usa esse storage (vai ter que mudar o nome, e ver em quais funções ta usando essa)
 #se der erro eu troquei storage pra storage2
 
-def ler_token(token, nome): #funcional: lê o token para cadastro ou remoção
-    
-
-    return
-
 def captura_imagem(token, name): #funcional #capturar a imagem
     vid = cv2.VideoCapture(0)     
     time.sleep(1)
@@ -65,6 +60,13 @@ def cadastro(name): #função de cadastro
     db.collection(u'cadastros').document(name).set({u'nome': name , u'foto': url}) #.add() é sem id
     return print("cadastro concluido com sucesso")
 
+def remover(name): #remover do storage e do firestore, o nome da pessoa é passado e o arquivo é removido
+    db.collection(u"cadastros").document(name).delete() #remove o elemento da coleção -> documento (nome dado)
+    bucket = storage.bucket()
+    blob = bucket.blob(name + ".jpg") #passa o nome da imagem pro bucket
+    blob.delete() #remove o blob com o nome da imagem
+    return print("cadastro e imagem removidas com sucesso")
+
 def real_time_image(): #função para ficar capturando a imagem e ficar enviando para a coleção "video" que será mostrada no site   
     file_name = captura_imagem(2,"") #usa a função captura a imagem
     url = upload_and_get_url(file_name) #usa a função de guardar a imagem e obter a url
@@ -73,13 +75,6 @@ def real_time_image(): #função para ficar capturando a imagem e ficar enviando
     img_ref.update({"foto": url})
     print("update realizado")
     return
-
-def remover(name): #remover do storage e do firestore, o nome da pessoa é passado e o arquivo é removido
-    db.collection(u"cadastros").document(name).delete() #remove o elemento da coleção -> documento (nome dado)
-    bucket = storage.bucket()
-    blob = bucket.blob(name + ".jpg") #passa o nome da imagem pro bucket
-    blob.delete() #remove o blob com o nome da imagem
-    return print("cadastro e imagem removidas com sucesso")
 
 def download_images(): #função para baixar as imagens do storage
     blobs = bucket.list_blobs(prefix = 'cadastro/')
@@ -105,7 +100,8 @@ def known_face_encodings(directory):
     return encodings
 
 def reconhecimento():
-    image = face_recognition.load_image_file("cadastro/leo.jpg")
+    name = captura_imagem(0, "user")
+    image = face_recognition.load_image_file(name)
     face_locations = face_recognition.face_locations(image) 
     face_encodings = face_recognition.face_encodings(image, face_locations)
 
@@ -122,37 +118,42 @@ def reconhecimento():
             return name
     return "Desconhecido"
 
-doc_ref = db.collection('Token').document('token')
+#doc_ref = db.collection('Token').document('token')
 
 # Define a callback function to handle changes to the document
-def on_snapshot_callback(doc_snapshot, changes, read_time):
-    for doc in doc_snapshot:
-        if doc.exists:
-            doc_data = doc.to_dict()
-            token =doc_data.get('token')
-            nome = doc_data.get('nome')
-            # Compare the value of a specific field to a value in an if statement
-            if token == 1:
-                cadastro(nome)
-                print("ok cadastro")
-                db.collection(u'Token').document('token').set({u'name': "-" , u'token': 0})
-
-            if token == 2:
-                remover(nome)
-                print("ok remove")
-                db.collection(u'Token').document('token').set({u'name': "-" , u'token': 0})
+#def on_snapshot_callback(doc_snapshot, changes, read_time):
+#    for doc in doc_snapshot:
+#        if doc.exists:
+#            doc_data = doc.to_dict()
+#            token =doc_data.get('token')
+#            nome = doc_data.get('nome')
+#            # Compare the value of a specific field to a value in an if statement
+#            if token == 1:
+#                cadastro(nome)
+#                print("ok cadastro")
+#                db.collection(u'Token').document('token').set({u'name': "-" , u'token': 0})
+#            if token == 2:
+#                remover(nome)
+#                print("ok remove")
+#                db.collection(u'Token').document('token').set({u'name': "-" , u'token': 0})
             
 
-def start_firestore_watch():
-    doc_watch = doc_ref.on_snapshot(on_snapshot_callback)
+#def start_firestore_watch():
+#    doc_watch = doc_ref.on_snapshot(on_snapshot_callback)
 
 # Start the Firestore watch in a separate thread
-firestore_watch_thread = threading.Thread(target=start_firestore_watch)
-firestore_watch_thread.start()
+#firestore_watch_thread = threading.Thread(target=start_firestore_watch)
+#firestore_watch_thread.start()
+
+
+while True:
+    print(reconhecimento())
+    
+
+
 
 #download_images()
-print(reconhecimento())
-
+#print(reconhecimento())
 
 ##########LINKS UTEIS##############
 #https://firebase.google.com/s/results/?q=db%20collection
