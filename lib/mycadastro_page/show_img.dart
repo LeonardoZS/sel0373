@@ -1,42 +1,15 @@
-import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
-import 'package:sel0373/show_img.dart';
-
-class GerenciarCadastros extends StatelessWidget {
-  const GerenciarCadastros({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Second Route'),
-      ),
-      body: Center(
-          child: Container(
-        width: MediaQuery.of(context).size.width * 0.9,
-        height: MediaQuery.of(context).size.height * 0.9,
-        child: UserInformation(),
-      )),
-    );
-  }
-}
-
-
-
-
 //import 'dart:ui';
 import 'package:cloud_firestore/cloud_firestore.dart';
 //import 'package:firebase_core/firebase_core.dart';
 //import 'firebase_options.dart';
 import 'package:flutter/material.dart';
 
-class LastPicture extends StatefulWidget {
+class UserInformation extends StatefulWidget {
   @override
-  State<LastPicture> createState() => _LastPictureState();
+  _UserInformationState createState() => _UserInformationState();
 }
 
-class _LastPictureState extends State<LastPicture> {
+class _UserInformationState extends State<UserInformation> {
   final Stream<QuerySnapshot> _usersStream =
       FirebaseFirestore.instance.collection('cadastros').snapshots();
 
@@ -75,13 +48,17 @@ class _LastPictureState extends State<LastPicture> {
 
             picture.name = map['nome'];
             picture.link = map['foto'];
-            print(picture.link);
-            list = [];
             list.add(picture);
           });
         }
 
-        return ListView(children: getList());
+        return GridView.count(
+            //primary: false,
+            padding: const EdgeInsets.all(20),
+            crossAxisSpacing: 10,
+            mainAxisSpacing: 10,
+            crossAxisCount: 4,
+            children: getList());
       },
     );
   }
@@ -100,22 +77,34 @@ class ShowImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 200,
-      height: 200,
+      //width: 200,
+      height: 150,
+      decoration: BoxDecoration(
+        //color: Colors.green,
+        border: Border.all(),
+      ),
       child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
-        Container(width: 150, height: 150, child: Image.network(picture.link)),
+        Container(
+          width: 150,
+          height: 150,
+          decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              border: Border.all(),
+              image: DecorationImage(
+                  fit: BoxFit.cover, image: NetworkImage(picture.link))),
+          //child:
+        ),
         Text(
-          picture.name,
+          "Nome : " + picture.name,
           style: const TextStyle(
             decoration: TextDecoration.none,
+            fontWeight: FontWeight.bold,
             height: 2,
-            fontSize: 12,
+            fontSize: 14,
             color: Colors.black,
           ),
         ),
-        //Text(picture.link)
       ]),
     );
   }
 }
-

@@ -66,7 +66,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '209716118926',
     projectId: 'porteiroeletronico-sel0373',
     storageBucket: 'porteiroeletronico-sel0373.appspot.com',
-    iosClientId: '209716118926-ufhsoo9rp1ispl7qt4bc1fq9mndlvpus.apps.googleusercontent.com',
+    iosClientId:
+        '209716118926-ufhsoo9rp1ispl7qt4bc1fq9mndlvpus.apps.googleusercontent.com',
     iosBundleId: 'com.example.sel0373',
   );
 
@@ -76,7 +77,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '209716118926',
     projectId: 'porteiroeletronico-sel0373',
     storageBucket: 'porteiroeletronico-sel0373.appspot.com',
-    iosClientId: '209716118926-ufhsoo9rp1ispl7qt4bc1fq9mndlvpus.apps.googleusercontent.com',
+    iosClientId:
+        '209716118926-ufhsoo9rp1ispl7qt4bc1fq9mndlvpus.apps.googleusercontent.com',
     iosBundleId: 'com.example.sel0373',
   );
 }

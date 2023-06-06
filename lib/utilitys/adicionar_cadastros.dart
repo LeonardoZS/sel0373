@@ -4,16 +4,16 @@ import 'dart:typed_data';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'gerenciar_cadastros.dart';
-import 'main.dart';
-import 'firebase_options.dart';
+import '../mycadastro_page/gerenciar_cadastros.dart';
+import '../main.dart';
+import '../firebase/firebase_options.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
 class AdicionarCadastro extends StatelessWidget {
   AdicionarCadastro({super.key});
 
   //final storageRef = FirebaseStorage.instance.ref();
-  final storageRef = FirebaseStorage.instance.ref('uploads/');
+  final storageRef = FirebaseStorage.instance.ref('cadastro/');
 //final FirebaseFirestore db = FirebaseFirestore.instance;
 
   final TextEditingController emailController = TextEditingController();
@@ -155,8 +155,8 @@ class AdicionarCadastro extends StatelessWidget {
                           decoration: InputDecoration(
                               border: InputBorder.none,
                               // ignore: prefer_const_constructors
-                              icon: Icon(Icons.cake),
-                              hintText: 'Insira a data de nascimento'),
+                              icon: Icon(Icons.contact_mail),
+                              hintText: 'Insira o RG'),
                         ),
                         TextField(
                           autofocus: true,
@@ -196,12 +196,42 @@ class AdicionarCadastro extends StatelessWidget {
                             if (result != null) {
                               Uint8List? fileBytes = result.files.first.bytes;
                               String fileName = result.files.first.name;
-                              print(nameController.text);
+
+                              // ignore: use_build_context_synchronously
+                              showDialog<void>(
+                                context: context,
+                                //barrierDismissible: false, // user must tap button!
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                      title: Text('Carregando a imagem...'),
+                                      content: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          Container(
+                                            width: 30,
+                                            height: 30,
+                                            child: CircularProgressIndicator(
+                                              //backgroundColor: Colors.green,
+                                              valueColor:
+                                                  AlwaysStoppedAnimation<Color>(
+                                                      Colors.green),
+                                            ),
+                                          ),
+                                        ],
+                                      ));
+                                },
+                              );
+
                               await storageRef.child(fileName).putData(
                                   fileBytes!,
                                   SettableMetadata(
                                     contentType: "image/jpeg",
                                   ));
+
+                              Navigator.of(context, rootNavigator: true).pop();
                             }
                           },
                         ),

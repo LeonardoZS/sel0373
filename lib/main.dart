@@ -1,15 +1,10 @@
-import 'dart:ui';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:sel0373/show_img.dart';
-import 'package:sel0373/show_img_2.dart';
-import 'package:sel0373/webpage.dart';
-import 'package:sel0373/webteste.dart';
-import 'authentication.dart';
-import 'firebase_options.dart';
+import 'package:sel0373/home_page/homepage.dart';
+import 'login_page/authentication.dart';
+import 'firebase/firebase_options.dart';
 import 'package:flutter/material.dart';
 
-import 'package:sel0373/gerenciar_cadastros.dart';
+import 'package:sel0373/mycadastro_page/gerenciar_cadastros.dart';
 
 void main() async {
   await Firebase.initializeApp(
@@ -136,7 +131,7 @@ class _MyHomePageState extends State<MyHomePage> {
       //)
       //),
       //Responsive(mobile: MobilePage(), desktop: WebPage()),
-      WebTeste(),
+      HomePage(),
       //const WebPage(),
     ]);
   }

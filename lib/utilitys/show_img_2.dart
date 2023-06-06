@@ -1,17 +1,14 @@
-//import 'dart:ui';
 import 'package:cloud_firestore/cloud_firestore.dart';
-//import 'package:firebase_core/firebase_core.dart';
-//import 'firebase_options.dart';
 import 'package:flutter/material.dart';
 
-class UserInformation extends StatefulWidget {
+class UserInformation2 extends StatefulWidget {
   @override
   _UserInformationState createState() => _UserInformationState();
 }
 
-class _UserInformationState extends State<UserInformation> {
+class _UserInformationState extends State<UserInformation2> {
   final Stream<QuerySnapshot> _usersStream =
-      FirebaseFirestore.instance.collection('cadastros').snapshots();
+      FirebaseFirestore.instance.collection('video').snapshots();
 
   List<Picture> list = [];
 
@@ -48,18 +45,13 @@ class _UserInformationState extends State<UserInformation> {
 
             picture.name = map['nome'];
             picture.link = map['foto'];
-            print(picture.link);
             list.add(picture);
           });
         }
 
-        return GridView.count(
-            //primary: false,
-            padding: const EdgeInsets.all(20),
-            crossAxisSpacing: 10,
-            mainAxisSpacing: 1,
-            crossAxisCount: 4,
-            children: getList());
+        return ListView(
+          children: getList(),
+        );
       },
     );
   }
@@ -78,21 +70,9 @@ class ShowImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 200,
-      height: 200,
-      child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
-        Container(width: 150, height: 150, child: Image.network(picture.link)),
-        Text(
-          picture.name,
-          style: const TextStyle(
-            decoration: TextDecoration.none,
-            height: 2,
-            fontSize: 12,
-            color: Colors.black,
-          ),
-        ),
-        //Text(picture.link)
-      ]),
+      width: 100,
+      height: 100,
+      child: Image.network(picture.link),
     );
   }
 }

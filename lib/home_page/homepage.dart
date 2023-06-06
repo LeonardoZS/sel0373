@@ -1,13 +1,12 @@
-import 'package:sel0373/gerenciar_cadastros.dart';
+import 'package:sel0373/mycadastro_page/gerenciar_cadastros.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:sel0373/show_img.dart';
-import 'package:sel0373/show_img_2.dart';
+import 'package:sel0373/mycadastro_page/show_img.dart';
+import 'package:sel0373/utilitys/show_img_2.dart';
 import 'package:flutter/material.dart';
-
 import 'last_picture.dart';
 
-class WebTeste extends StatelessWidget {
-  WebTeste({super.key});
+class HomePage extends StatelessWidget {
+  HomePage({super.key});
 
   final FirebaseFirestore db = FirebaseFirestore.instance;
   //final washingtonRef = null;

@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, use_build_context_synchronously
 
 import 'dart:typed_data';
 
@@ -6,15 +6,15 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:sel0373/main.dart';
-import 'package:sel0373/show_img.dart';
-import 'package:sel0373/adicionar_cadastros.dart';
+import 'package:sel0373/mycadastro_page/show_img.dart';
+import 'package:sel0373/utilitys/adicionar_cadastros.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
 class GerenciarCadastros extends StatelessWidget {
   GerenciarCadastros({super.key});
 
   final FirebaseFirestore db = FirebaseFirestore.instance;
-  final storageRef = FirebaseStorage.instance.ref('uploads/');
+  final storageRef = FirebaseStorage.instance.ref('cadastro/');
 
   final TextEditingController emailController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
@@ -244,8 +244,8 @@ Future<void> _dialogBuilder(
                   controller: dataController,
                   decoration: InputDecoration(
                       border: InputBorder.none,
-                      icon: Icon(Icons.cake),
-                      hintText: 'Insira a data de nascimento'),
+                      icon: Icon(Icons.contact_mail),
+                      hintText: 'Insira o RG'),
                 ),
                 TextField(
                   autofocus: true,
@@ -288,16 +288,40 @@ Future<void> _dialogBuilder(
                     if (result != null) {
                       Uint8List? fileBytes = result.files.first.bytes;
                       String fileName = result.files.first.name;
-                      //print(nameController.text);
+
+                      showDialog<void>(
+                        context: context,
+                        //barrierDismissible: false, // user must tap button!
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                              title: Text('Carregando...'),
+                              content: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Container(
+                                    width: 30,
+                                    height: 30,
+                                    child: CircularProgressIndicator(
+                                      //backgroundColor: Colors.green,
+                                      valueColor: AlwaysStoppedAnimation<Color>(
+                                          Colors.green),
+                                    ),
+                                  ),
+                                ],
+                              ));
+                        },
+                      );
+
                       await storageRef.child(fileName).putData(
                           fileBytes!,
                           SettableMetadata(
                             contentType: "image/jpeg",
                           ));
 
-                      link = await storageRef.child(fileName).getDownloadURL();
+                      Navigator.of(context, rootNavigator: true).pop();
 
-                      print(link);
+                      link = await storageRef.child(fileName).getDownloadURL();
                     }
                   },
                 ),
@@ -331,7 +355,7 @@ Future<void> _dialogBuilder(
                         };
                         db
                             .collection("cadastros")
-                            .doc()
+                            .doc(nameController.text)
                             .set(data, SetOptions(merge: true));
                       },
                     ),
