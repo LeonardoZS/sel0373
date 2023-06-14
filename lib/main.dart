@@ -1,4 +1,5 @@
 import 'package:firebase_core/firebase_core.dart';
+import 'package:sel0373/Appbar/drawer.dart';
 import 'package:sel0373/home_page/homepage.dart';
 import 'login_page/authentication.dart';
 import 'firebase/firebase_options.dart';
@@ -34,73 +35,7 @@ class FirstPage extends StatelessWidget {
           backgroundColor: Colors.transparent,
           elevation: 0.0,
           iconTheme: const IconThemeData(color: Colors.black)),
-      drawer: Drawer(
-        // Add a ListView to the drawer. This ensures the user can scroll
-        // through the options in the drawer if there isn't enough vertical
-        // space to fit everything.
-        child: ListView(
-          // Important: Remove any padding from the ListView.
-          padding: EdgeInsets.zero,
-          children: [
-            // ignore: prefer_const_constructors
-            UserAccountsDrawerHeader(
-              decoration: const BoxDecoration(
-                color: Colors.white,
-              ),
-              accountName: const Text(
-                "Leonardo  Silva",
-                style: TextStyle(
-                  color: Colors.black,
-                ),
-              ),
-              accountEmail: const Text(
-                "leonardo@usp.br",
-                style: TextStyle(
-                  color: Colors.black,
-                ),
-              ),
-              currentAccountPicture: const CircleAvatar(
-                radius: 30.0,
-                backgroundImage: NetworkImage(
-                    'https://firebasestorage.googleapis.com/v0/b/porteiroeletronico-sel0373.appspot.com/o/leo.png?alt=media&token=a1af14e8-69ac-4357-ad93-17c82e4c8405'),
-                backgroundColor: Colors.white,
-              ),
-            ),
-            ListTile(
-              leading: const Icon(
-                Icons.home,
-              ),
-              title: const Text('Portaria'),
-              onTap: () {
-                // Update the state of the app.
-                // ...
-              },
-            ),
-            ListTile(
-              title: const Text('Cadastros'),
-              leading: const Icon(
-                Icons.contacts,
-              ),
-              onTap: () {
-                Navigator.of(context).push(
-                    MaterialPageRoute<Null>(builder: (BuildContext context) {
-                  return GerenciarCadastros();
-                }));
-              },
-            ),
-            ListTile(
-              leading: const Icon(
-                Icons.people,
-              ),
-              title: const Text('Desenvolvedores'),
-              onTap: () {
-                // Update the state of the app.
-                // ...
-              },
-            ),
-          ],
-        ),
-      ),
+      drawer: Drawer(child: DrawerTemplate()),
       body: const MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
@@ -118,21 +53,15 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
-    return Stack(children: [
-      Image.asset("assets/images/agoravai.png",
-          width: double.infinity,
-          height: double.infinity,
-          fit: BoxFit.cover,
-          alignment: Alignment.center),
-      //Positioned.fill(
-      //child: BackdropFilter(
-      //filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
-      //child: const SizedBox(),
-      //)
-      //),
-      //Responsive(mobile: MobilePage(), desktop: WebPage()),
-      HomePage(),
-      //const WebPage(),
-    ]);
+    return
+        //Positioned.fill(
+        //child: BackdropFilter(
+        //filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
+        //child: const SizedBox(),
+        //)
+        //),
+        //Responsive(mobile: MobilePage(), desktop: WebPage()),
+        HomePage();
+    //const WebPage(),
   }
 }

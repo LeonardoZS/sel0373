@@ -10,6 +10,8 @@ import 'package:sel0373/mycadastro_page/show_img.dart';
 import 'package:sel0373/utilitys/adicionar_cadastros.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
+import '../Appbar/drawer.dart';
+
 class GerenciarCadastros extends StatelessWidget {
   GerenciarCadastros({super.key});
 
@@ -36,128 +38,79 @@ class GerenciarCadastros extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
         home: Scaffold(
-      extendBodyBehindAppBar: true,
+      //extendBodyBehindAppBar: true,
       appBar: AppBar(
-          backgroundColor: Colors.transparent,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(
+              bottom: Radius.circular(30),
+            ),
+          ),
+          title: Text(
+            'Meus Cadastros',
+            style: TextStyle(
+              decoration: TextDecoration.none,
+              color: Colors.black,
+            ),
+          ),
+          centerTitle: true,
+          //backgroundColor: Colors.transparent,
+          backgroundColor: Colors.green,
           elevation: 0.0,
           iconTheme: const IconThemeData(color: Colors.black)),
+
       drawer: Drawer(
         // Add a ListView to the drawer. This ensures the user can scroll
         // through the options in the drawer if there isn't enough vertical
         // space to fit everything.
-        child: ListView(
-          // Important: Remove any padding from the ListView.
-          padding: EdgeInsets.zero,
-          children: [
-            // ignore: prefer_const_constructors
-            UserAccountsDrawerHeader(
-              decoration: const BoxDecoration(
-                color: Colors.white,
-              ),
-              accountName: const Text(
-                "Leonardo Zaniboni SIlva",
-                style: TextStyle(
-                  color: Colors.black,
-                ),
-              ),
-              accountEmail: const Text(
-                "leonardo@usp.br",
-                style: TextStyle(
-                  color: Colors.black,
-                ),
-              ),
-              currentAccountPicture: const CircleAvatar(
-                radius: 30.0,
-                backgroundImage: NetworkImage(
-                    'https://firebasestorage.googleapis.com/v0/b/porteiroeletronico-sel0373.appspot.com/o/leo.png?alt=media&token=a1af14e8-69ac-4357-ad93-17c82e4c8405'),
-                backgroundColor: Colors.white,
-              ),
-            ),
-            ListTile(
-              leading: const Icon(
-                Icons.home,
-              ),
-              title: const Text('Portaria'),
-              onTap: () {
-                Navigator.of(context).push(
-                    MaterialPageRoute<Null>(builder: (BuildContext context) {
-                  return FirstPage();
-                }));
-              },
-            ),
-            ListTile(
-              title: const Text('Cadastros'),
-              leading: const Icon(
-                Icons.contacts,
-              ),
-              onTap: () {
-                // Navigator.of(context).push(
-                //      MaterialPageRoute<Null>(builder: (BuildContext context) {
-                //return GerenciarCadastros(novoCadastro: Null,);
-                //  }
-                //  )
-                //  );
-              },
-            ),
-            ListTile(
-              leading: const Icon(
-                Icons.people,
-              ),
-              title: const Text('Desenvolvedores'),
-              onTap: () {
-                // Navigator.of(context).push(
-                //     MaterialPageRoute<Null>(builder: (BuildContext context) {
-                //   return GerenciarCadastros();
-                // }));
-              },
-            ),
-          ],
-        ),
+        child: DrawerTemplate(),
       ),
+      //backgroundColor: Color.fromARGB(255, 128, 168, 149),
       body: Stack(
         children: [
-          Image.asset("assets/images/agoravai.png",
-              width: double.infinity,
-              height: double.infinity,
-              fit: BoxFit.cover,
-              alignment: Alignment.center),
+          // Image.asset("assets/images/blur.jpg",
+          //     width: double.infinity,
+          //     height: double.infinity,
+          //     fit: BoxFit.cover,
+          //     alignment: Alignment.center),
           Center(
               child: Column(children: [
             // ignore: prefer_const_constructors
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              // ignore: prefer_const_literals_to_create_immutables
-              children: [
-                const Icon(Icons.contacts, size: 30.0),
-                const SizedBox(width: 10),
-                const Text(
-                  'Meus Cadastros',
-                  style: TextStyle(
-                    decoration: TextDecoration.none,
-                    height: 2,
-                    fontSize: 30,
-                    color: Colors.black,
-                  ),
-                ),
-              ],
-            ),
+            // Row(
+            //   mainAxisAlignment: MainAxisAlignment.center,
+            //   crossAxisAlignment: CrossAxisAlignment.center,
+            //   // ignore: prefer_const_literals_to_create_immutables
+            //   children: [
+            //     const Icon(Icons.contacts, size: 30.0),
+            //     const SizedBox(width: 10),
+            //     const Text(
+            //       'Meus Cadastros',
+            //       style: TextStyle(
+            //         decoration: TextDecoration.none,
+            //         height: 2,
+            //         fontSize: 30,
+            //         color: Colors.black,
+            //       ),
+            //     ),
+            //   ],
+            // ),
             Column(
               children: [
-                Card(
-                    elevation: 10,
-                    child: Container(
-                        width: MediaQuery.of(context).size.width * 0.9,
-                        height: MediaQuery.of(context).size.height * 0.8,
-                        decoration: const BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(40),
-                              topRight: Radius.circular(40),
-                              bottomLeft: Radius.circular(40),
-                              bottomRight: Radius.circular(40),
-                            )),
-                        child: UserInformation())),
+                //Card(
+                //elevation: 10,
+
+                Container(
+                    color: Colors.white,
+                    width: MediaQuery.of(context).size.width,
+                    height: MediaQuery.of(context).size.height * 0.8,
+                    // decoration: const BoxDecoration(
+                    //     color: Colors.white,
+                    //     borderRadius: BorderRadius.only(
+                    //       topLeft: Radius.circular(40),
+                    //       topRight: Radius.circular(40),
+                    //       bottomLeft: Radius.circular(40),
+                    //       bottomRight: Radius.circular(40),
+                    //     )),
+                    child: UserInformation()),
                 SizedBox(height: 30),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,

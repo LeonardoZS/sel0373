@@ -13,17 +13,7 @@ class _LastPictureState extends State<LastPicture> {
   final Stream<QuerySnapshot> _usersStream =
       FirebaseFirestore.instance.collection('video').snapshots();
 
-  List<Picture> list = [];
-
-  List<Widget> getList() {
-    List<Widget> widgets = [];
-
-    list.forEach((element) {
-      widgets.add(ShowImage(picture: element));
-    });
-
-    return widgets;
-  }
+  final Picture picture = Picture();
 
   @override
   Widget build(BuildContext context) {
@@ -39,22 +29,17 @@ class _LastPictureState extends State<LastPicture> {
         }
 
         if (snapshot.hasData) {
-          list = [];
-
           snapshot.data?.docs.forEach((element) {
-            Picture picture = Picture();
+            //Picture picture = Picture();
 
             Map<String, dynamic> map = element.data() as Map<String, dynamic>;
 
             picture.name = map['nome'];
             picture.link = map['foto'];
-            print(picture.link);
-            list = [];
-            list.add(picture);
           });
         }
 
-        return ListView(children: getList());
+        return Image.network(picture.link);
       },
     );
   }
@@ -72,22 +57,8 @@ class ShowImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 400,
-      height: 400,
-      child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
-        Container(width: 350, height: 350, child: Image.network(picture.link)),
-        Text(
-          picture.name,
-          style: const TextStyle(
-            decoration: TextDecoration.none,
-            height: 2,
-            fontSize: 12,
-            color: Colors.black,
-          ),
-        ),
-        //Text(picture.link)
-      ]),
+    return Image.network(
+      picture.link,
     );
   }
 }
