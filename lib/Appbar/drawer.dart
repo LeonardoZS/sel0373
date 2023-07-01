@@ -6,6 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:sel0373/Appbar/drawer.dart';
 import 'package:sel0373/devs/dev.dart';
 import 'package:sel0373/home_page/homepage.dart';
+import '../history/history.dart';
 import '../mycadastro_page/gerenciar_cadastros.dart';
 import 'package:flutter/material.dart';
 
@@ -105,6 +106,17 @@ class _DrawerTemplateState extends State<DrawerTemplate> {
                     Navigator.of(context).push(MaterialPageRoute<Null>(
                         builder: (BuildContext context) {
                       return Developers();
+                    }));
+                  },
+                ),
+
+                ListTile(
+                  leading: const Icon(Icons.history, color: Colors.green),
+                  title: const Text('Histórico'),
+                  onTap: () {
+                    Navigator.of(context).push(MaterialPageRoute<Null>(
+                        builder: (BuildContext context) {
+                      return History();
                     }));
                   },
                 ),

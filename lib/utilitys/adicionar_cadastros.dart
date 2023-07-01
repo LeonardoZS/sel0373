@@ -31,11 +31,7 @@ class AdicionarCadastro extends StatelessWidget {
           elevation: 0.0,
           iconTheme: const IconThemeData(color: Colors.black)),
       drawer: Drawer(
-        // Add a ListView to the drawer. This ensures the user can scroll
-        // through the options in the drawer if there isn't enough vertical
-        // space to fit everything.
         child: ListView(
-          // Important: Remove any padding from the ListView.
           padding: EdgeInsets.zero,
           children: [
             // ignore: prefer_const_constructors
@@ -112,8 +108,8 @@ class AdicionarCadastro extends StatelessWidget {
                 elevation: 20,
                 child: Container(
                     color: Colors.white,
-                    width: MediaQuery.of(context).size.width * 0.4,
-                    height: MediaQuery.of(context).size.height * 0.7,
+                    width: MediaQuery.of(context).size.width * 0.3,
+                    height: MediaQuery.of(context).size.height * 0.3,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       crossAxisAlignment: CrossAxisAlignment.center,
