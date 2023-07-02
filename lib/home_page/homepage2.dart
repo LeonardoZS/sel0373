@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'last_picture.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class HomePage2 extends StatelessWidget {
-  HomePage2({super.key});
+class HomeMobilePage extends StatelessWidget {
+  HomeMobilePage({super.key});
 
   final FirebaseFirestore db = FirebaseFirestore.instance;
   void _permiteAcesso() {

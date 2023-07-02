@@ -32,6 +32,16 @@ class _UserInformationState extends State<UserInformation> {
     return widgets;
   }
 
+  List<Widget> getListWeb() {
+    List<Widget> widgets = [];
+
+    list.forEach((element) {
+      widgets.add(ShowImage(picture: element));
+    });
+
+    return widgets;
+  }
+
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
@@ -64,13 +74,10 @@ class _UserInformationState extends State<UserInformation> {
 
         return Responsive(
             mobile: ListView(children: getList()),
-            desktop: GridView.count(
-                //primary: false,
-                padding: const EdgeInsets.all(20),
-                crossAxisSpacing: 10,
-                mainAxisSpacing: 10,
-                crossAxisCount: 4,
-                children: getList()));
+            desktop: GridView(
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2, childAspectRatio: 3),
+                children: getListWeb()));
 
         // GridView.count(
         //     //primary: false,
@@ -183,40 +190,93 @@ class ShowImage extends StatelessWidget {
                 ),
               ]),
         ),
-        desktop: Container(
-          //width: 200,
-          height: 150,
-          decoration: BoxDecoration(
-              //color: Colors.green,
-              //border: Border.all(),
-              ),
-          child:
-              Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
-            Container(
-              width: 150,
-              height: 150,
-              decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  border: Border.all(),
-                  image: DecorationImage(
-                      fit: BoxFit.cover, image: NetworkImage(picture.link))),
-              //child:
-            ),
-            Text(
-              "Nome : " + picture.name,
-              style: const TextStyle(
-                decoration: TextDecoration.none,
-                fontWeight: FontWeight.bold,
-                fontSize: 14,
-                color: Colors.black,
-              ),
-            ),
-          ]),
+
+        //------------------------------------------------------------------------
+
+        desktop: Center(
+          child: Container(
+            width: MediaQuery.of(context).size.width * 0.45,
+            height: 200,
+            // decoration: BoxDecoration(
+            //   color: Colors.green,
+            //   border: Border.all(),
+            // ),
+            child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Container(
+                    width: 200,
+                    height: 200,
+                    decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        border: Border.all(),
+                        image: DecorationImage(
+                            fit: BoxFit.cover,
+                            image: NetworkImage(picture.link))),
+                    //child:
+                  ),
+                  Container(
+                    width: 400,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        picture.cadastro == 'Morador'
+                            ? Text(
+                                picture.cadastro,
+                                //picture.cadastro == 'morador'?
+                                style: const TextStyle(
+                                  decoration: TextDecoration.none,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 25,
+                                  color: Colors.green,
+                                ),
+                              )
+                            : Text(
+                                picture.cadastro,
+                                style: const TextStyle(
+                                  decoration: TextDecoration.none,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 25,
+                                  color: Colors.red,
+                                ),
+                              ),
+                        Text(
+                          "Nome : " + picture.name,
+                          style: const TextStyle(
+                            decoration: TextDecoration.none,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20,
+                            color: Colors.black,
+                          ),
+                        ),
+                        Text(
+                          "Apartamento : " + picture.ap,
+                          style: const TextStyle(
+                            decoration: TextDecoration.none,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20,
+                            color: Colors.black,
+                          ),
+                        ),
+                        Text(
+                          "RG : " + picture.rg,
+                          style: const TextStyle(
+                            decoration: TextDecoration.none,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ]),
+          ),
         ));
   }
 }
-
-
 
 // class MobileList extends StatelessWidget {
 //   const MobileList({super.key});
@@ -227,13 +287,12 @@ class ShowImage extends StatelessWidget {
 //   }
 // }
 
-
 // class Webgrid extends StatelessWidget {
 //   const Webgrid({super.key});
 
 //   @override
 //   Widget build(BuildContext context) {
-//     return         
+//     return
 //         GridView.count(
 //             //primary: false,
 //             padding: const EdgeInsets.all(20),

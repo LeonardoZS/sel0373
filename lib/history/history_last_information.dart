@@ -7,12 +7,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import '../responsive.dart';
 
-class HistoryInformation extends StatefulWidget {
-  @override
-  _HistoryInformationState createState() => _HistoryInformationState();
-}
-
-class _HistoryInformationState extends State<HistoryInformation> {
+class HistoryLastInformation extends StatelessWidget {
   final Stream<QuerySnapshot> _usersStream =
       FirebaseFirestore.instance.collection('video').snapshots();
 
@@ -28,7 +23,7 @@ class _HistoryInformationState extends State<HistoryInformation> {
       ));
     });
 
-    return widgets;
+    return widgets.sublist(0, 8);
   }
 
   @override
@@ -81,9 +76,7 @@ class _HistoryInformationState extends State<HistoryInformation> {
           });
         }
 
-        return Responsive(
-            mobile: ListView(children: getList()),
-            desktop: ListView(children: getList()));
+        return ListView(children: getList());
 
         // GridView.count(
         //     //primary: false,
@@ -259,13 +252,9 @@ class ShowImage extends StatelessWidget {
                         style: const TextStyle(
                           decoration: TextDecoration.none,
                           fontWeight: FontWeight.bold,
-                          fontSize: 25,
+                          fontSize: 20,
                           color: Colors.black,
                         ),
-                      ),
-
-                      SizedBox(
-                        height: 8,
                       ),
 
                       // Text(
@@ -283,7 +272,7 @@ class ShowImage extends StatelessWidget {
                           decoration: TextDecoration.none,
                           fontWeight: FontWeight.bold,
                           fontSize: 20,
-                          color: Color.fromARGB(255, 29, 112, 180),
+                          color: Color.fromARGB(255, 0, 55, 100),
                         ),
                       ),
 
@@ -293,7 +282,7 @@ class ShowImage extends StatelessWidget {
                           decoration: TextDecoration.none,
                           fontWeight: FontWeight.bold,
                           fontSize: 20,
-                          color: Color.fromARGB(255, 29, 112, 180),
+                          color: Color.fromARGB(255, 0, 55, 100),
                         ),
                       ),
                     ],

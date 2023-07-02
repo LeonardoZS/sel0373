@@ -131,14 +131,6 @@ class _GerenciarCadastrosState extends State<GerenciarCadastros> {
                     color: Colors.white,
                     width: MediaQuery.of(context).size.width,
                     height: MediaQuery.of(context).size.height * 0.8,
-                    // decoration: const BoxDecoration(
-                    //     color: Colors.white,
-                    //     borderRadius: BorderRadius.only(
-                    //       topLeft: Radius.circular(40),
-                    //       topRight: Radius.circular(40),
-                    //       bottomLeft: Radius.circular(40),
-                    //       bottomRight: Radius.circular(40),
-                    //     )),
                     child: UserInformation()),
                 SizedBox(height: 30),
                 Row(
@@ -160,15 +152,28 @@ class _GerenciarCadastrosState extends State<GerenciarCadastros> {
                       ),
                       onPressed: () {
                         _permiteAcesso();
-                        _dialogBuilder(
-                            context,
-                            storageRef,
-                            nameController,
-                            dataController,
-                            emailController,
-                            phoneController,
-                            db,
-                            link);
+
+                        if (MediaQuery.of(context).size.width > 992) {
+                          _dialogBuilderWeb(
+                              context,
+                              storageRef,
+                              nameController,
+                              dataController,
+                              emailController,
+                              phoneController,
+                              db,
+                              link);
+                        } else {
+                          _dialogBuilder(
+                              context,
+                              storageRef,
+                              nameController,
+                              dataController,
+                              emailController,
+                              phoneController,
+                              db,
+                              link);
+                        }
 
                         //    Navigator.push(
                         //        context,
@@ -190,337 +195,11 @@ class _GerenciarCadastrosState extends State<GerenciarCadastros> {
                         ),
                       ),
                       onPressed: () {
-                        //_permiteAcesso();
-                        // _dialogRemove(
-                        //     context, storageRef, attController, db, link);
-
-                        showDialog(
-                          context: context,
-                          builder: (context) {
-                            String contentText = "Content of Dialog";
-                            return StatefulBuilder(
-                              builder: (context, setState) {
-                                return AlertDialog(
-                                  title: Center(
-                                      child: Text('Remoçao de Usuário',
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold))),
-                                  actions: <Widget>[
-                                    // ignore: prefer_const_constructors
-                                    Center(
-                                      child: Container(
-                                        width:
-                                            MediaQuery.of(context).size.width *
-                                                0.55,
-                                        height:
-                                            MediaQuery.of(context).size.width *
-                                                0.4,
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                          // ignore: prefer_const_literals_to_create_immutables
-                                          children: [
-                                            Text('Digite o nome do usuário'),
-                                            TextField(
-                                              autofocus: true,
-                                              controller: attController,
-                                              // ignore: prefer_const_constructors
-                                              decoration: InputDecoration(
-                                                  border: InputBorder.none,
-                                                  // ignore: prefer_const_constructors
-                                                  icon: Icon(
-                                                    Icons.remove,
-                                                    color: Colors.red,
-                                                  ),
-                                                  hintText: 'Nome do usuário'),
-                                            ),
-                                            SizedBox(
-                                              height: 15,
-                                            ),
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.center,
-                                              children: [
-                                                TextButton(
-                                                  style: TextButton.styleFrom(
-                                                      // backgroundColor: Color.fromARGB(255, 240, 217, 218),
-                                                      // elevation: 20,
-                                                      // shadowColor: Color.fromARGB(255, 243, 214, 214),
-                                                      ),
-                                                  child: const Text(
-                                                    'Cancelar',
-                                                    style: TextStyle(
-                                                        color: Colors.black),
-                                                  ),
-                                                  onPressed: () {
-                                                    print(attController.text);
-                                                    Navigator.of(context).pop();
-                                                  },
-                                                ),
-                                                TextButton(
-                                                  style: TextButton.styleFrom(
-                                                    backgroundColor:
-                                                        Color.fromARGB(
-                                                            255, 243, 175, 177),
-                                                    elevation: 20,
-                                                    shadowColor: Color.fromARGB(
-                                                        255, 234, 158, 158),
-                                                  ),
-                                                  child: const Text(
-                                                    'Remover',
-                                                    style: TextStyle(
-                                                        color: Colors.black),
-                                                  ),
-                                                  onPressed: () {
-                                                    db
-                                                        .collection("cadastros")
-                                                        .doc(attController.text)
-                                                        .get()
-                                                        .then((docSnapshot) => {
-                                                              if (docSnapshot
-                                                                  .exists)
-                                                                {
-                                                                  db
-                                                                      .collection(
-                                                                          "cadastros")
-                                                                      .doc(attController
-                                                                          .text)
-                                                                      .delete(),
-                                                                  db
-                                                                      .collection(
-                                                                          'token_cadastro')
-                                                                      .doc(
-                                                                          'token_cadastro')
-                                                                      .update({
-                                                                    "token": "2"
-                                                                  }),
-                                                                  db
-                                                                      .collection(
-                                                                          'token_cadastro')
-                                                                      .doc(
-                                                                          'token_cadastro')
-                                                                      .update({
-                                                                    "filename":
-                                                                        attController
-                                                                            .text
-                                                                  }),
-                                                                  Navigator.of(
-                                                                          context)
-                                                                      .pop()
-                                                                }
-                                                              else
-                                                                {
-                                                                  setState(() {
-                                                                    _displayText =
-                                                                        'Usuário não encontrado!';
-                                                                  }),
-                                                                }
-                                                            });
-                                                  },
-                                                ),
-                                              ],
-                                            ),
-                                            SizedBox(
-                                              height: 5,
-                                            ),
-                                            Center(
-                                              child: Text(
-                                                _displayText,
-                                                style: TextStyle(
-                                                    color: Colors.red),
-                                              ),
-                                            )
-                                          ],
-                                        ),
-                                      ),
-                                    )
-                                  ],
-                                );
-                              },
-                            );
-                          },
-                        );
-
-                        // AlertDialog(
-                        //           title: Text("Title of Dialog"),
-                        //           content: Text(contentText),
-                        //           actions: <Widget>[
-                        //             TextButton(
-                        //               onPressed: () => Navigator.pop(context),
-                        //               child: Text("Cancel"),
-                        //             ),
-                        //             TextButton(
-                        //               onPressed: () {
-                        //                 setState(() {
-                        //                   contentText =
-                        //                       "Changed Content of Dialog";
-                        //                 });
-                        //               },
-                        //               child: Text("Change"),
-                        //             ),
-                        //           ],
-                        //         );
-
-                        // showDialog(
-                        //   context: context,
-                        //   builder: (BuildContext context) {
-                        //     return AlertDialog(
-                        //       title: Center(
-                        //           child: Text('Remoçao de Usuário',
-                        //               style: TextStyle(
-                        //                   fontWeight: FontWeight.bold))),
-                        //       actions: <Widget>[
-                        //         // ignore: prefer_const_constructors
-                        //         Center(
-                        //           child: Container(
-                        //             width: MediaQuery.of(context).size.width *
-                        //                 0.55,
-                        //             height:
-                        //                 MediaQuery.of(context).size.width * 0.4,
-                        //             child: Column(
-                        //               crossAxisAlignment:
-                        //                   CrossAxisAlignment.start,
-                        //               mainAxisAlignment:
-                        //                   MainAxisAlignment.start,
-                        //               // ignore: prefer_const_literals_to_create_immutables
-                        //               children: [
-                        //                 Text('Digite o nome da pessoa'),
-                        //                 TextField(
-                        //                   autofocus: true,
-                        //                   controller: attController,
-                        //                   // ignore: prefer_const_constructors
-                        //                   decoration: InputDecoration(
-                        //                       border: InputBorder.none,
-                        //                       // ignore: prefer_const_constructors
-                        //                       icon: Icon(
-                        //                         Icons.remove,
-                        //                         color: Colors.red,
-                        //                       ),
-                        //                       hintText: 'Nome do usuário'),
-                        //                 ),
-                        //                 SizedBox(
-                        //                   height: 15,
-                        //                 ),
-                        //                 Row(
-                        //                   mainAxisAlignment:
-                        //                       MainAxisAlignment.spaceBetween,
-                        //                   crossAxisAlignment:
-                        //                       CrossAxisAlignment.center,
-                        //                   children: [
-                        //                     TextButton(
-                        //                       style: TextButton.styleFrom(
-                        //                           // backgroundColor: Color.fromARGB(255, 240, 217, 218),
-                        //                           // elevation: 20,
-                        //                           // shadowColor: Color.fromARGB(255, 243, 214, 214),
-                        //                           ),
-                        //                       child: const Text(
-                        //                         'Cancelar',
-                        //                         style: TextStyle(
-                        //                             color: Colors.black),
-                        //                       ),
-                        //                       onPressed: () {
-                        //                         print(attController.text);
-                        //                         Navigator.of(context).pop();
-                        //                       },
-                        //                     ),
-                        //                     TextButton(
-                        //                       style: TextButton.styleFrom(
-                        //                         backgroundColor: Color.fromARGB(
-                        //                             255, 243, 175, 177),
-                        //                         elevation: 20,
-                        //                         shadowColor: Color.fromARGB(
-                        //                             255, 234, 158, 158),
-                        //                       ),
-                        //                       child: const Text(
-                        //                         'Remover',
-                        //                         style: TextStyle(
-                        //                             color: Colors.black),
-                        //                       ),
-                        //                       onPressed: () {
-                        //                         db
-                        //                             .collection("DELETETESTE")
-                        //                             .doc(attController.text)
-                        //                             .get()
-                        //                             .then((docSnapshot) => {
-                        //                                   if (docSnapshot
-                        //                                       .exists)
-                        //                                     {
-                        //                                       db
-                        //                                           .collection(
-                        //                                               "DELETETESTE")
-                        //                                           .doc(
-                        //                                               attController
-                        //                                                   .text)
-                        //                                           .delete(),
-                        //                                       db
-                        //                                           .collection(
-                        //                                               'token_cadastro')
-                        //                                           .doc(
-                        //                                               'token_cadastro')
-                        //                                           .update({
-                        //                                         "token": "2"
-                        //                                       }),
-                        //                                       Navigator.of(
-                        //                                               context)
-                        //                                           .pop()
-                        //                                     }
-                        //                                   else
-                        //                                     {
-                        //                                       _updateDisplayText,
-                        //                                       // String Texto =
-                        //                                       //     'Usuário não encontrado.',
-                        //                                       print('oi' +
-                        //                                           _displayText)
-                        //                                     }
-                        //                                 });
-
-                        //                         // db
-                        //                         //     .collection("DELETETESTE")
-                        //                         //     .doc(apController.text)
-                        //                         //     .delete();
-
-                        //                         // db
-                        //                         //     .collection('token_cadastro')
-                        //                         //     .doc('token_cadastro')
-                        //                         //     .update({"token": "1"});
-
-                        //                         // final data = <String, String>{
-                        //                         //   "nome": nameController.text,
-                        //                         //   "foto": link,
-                        //                         //   "ap": apController.text,
-                        //                         //   "cadastro": cadastroController.text,
-                        //                         //   "rg": rgController.text,
-                        //                         // };
-                        //                         // db
-                        //                         //     .collection("cadastros")
-                        //                         //     .doc(nameController.text)
-                        //                         //     .set(data, SetOptions(merge: true));
-                        //                       },
-                        //                     ),
-                        //                   ],
-                        //                 ),
-                        //                 Text(
-                        //                   'oi' + _displayText,
-                        //                   style: TextStyle(color: Colors.red),
-                        //                 )
-                        //               ],
-                        //             ),
-                        //           ),
-                        //         )
-                        //       ],
-                        //     );
-                        //   },
-                        // );
-
-                        //    Navigator.push(
-                        //        context,
-                        //        MaterialPageRoute(
-                        //            builder: (context) => AdicionarCadastro()));
+                        if (MediaQuery.of(context).size.width > 992) {
+                          RemoveWeb(context);
+                        } else {
+                          RemoveMobile(context);
+                        }
                       },
                     )
                   ],
@@ -531,6 +210,258 @@ class _GerenciarCadastrosState extends State<GerenciarCadastros> {
         ],
       ),
     ));
+  }
+
+  Future<dynamic> RemoveMobile(BuildContext context) {
+    return showDialog(
+      context: context,
+      builder: (context) {
+        String contentText = "Content of Dialog";
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return AlertDialog(
+              title: Center(
+                  child: Text('Remoçao de Usuário',
+                      style: TextStyle(fontWeight: FontWeight.bold))),
+              actions: <Widget>[
+                // ignore: prefer_const_constructors
+                Center(
+                  child: Container(
+                    width: MediaQuery.of(context).size.width * 0.55,
+                    height: MediaQuery.of(context).size.width * 0.4,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      // ignore: prefer_const_literals_to_create_immutables
+                      children: [
+                        Text('Digite o nome do usuário'),
+                        TextField(
+                          autofocus: true,
+                          controller: attController,
+                          // ignore: prefer_const_constructors
+                          decoration: InputDecoration(
+                              border: InputBorder.none,
+                              // ignore: prefer_const_constructors
+                              icon: Icon(
+                                Icons.remove,
+                                color: Colors.red,
+                              ),
+                              hintText: 'Nome do usuário'),
+                        ),
+                        SizedBox(
+                          height: 15,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            TextButton(
+                              style: TextButton.styleFrom(
+                                  // backgroundColor: Color.fromARGB(255, 240, 217, 218),
+                                  // elevation: 20,
+                                  // shadowColor: Color.fromARGB(255, 243, 214, 214),
+                                  ),
+                              child: const Text(
+                                'Cancelar',
+                                style: TextStyle(color: Colors.black),
+                              ),
+                              onPressed: () {
+                                print(attController.text);
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                            TextButton(
+                              style: TextButton.styleFrom(
+                                backgroundColor:
+                                    Color.fromARGB(255, 243, 175, 177),
+                                elevation: 20,
+                                shadowColor: Color.fromARGB(255, 234, 158, 158),
+                              ),
+                              child: const Text(
+                                'Remover',
+                                style: TextStyle(color: Colors.black),
+                              ),
+                              onPressed: () {
+                                db
+                                    .collection("cadastros")
+                                    .doc(attController.text)
+                                    .get()
+                                    .then((docSnapshot) => {
+                                          if (docSnapshot.exists)
+                                            {
+                                              db
+                                                  .collection("cadastros")
+                                                  .doc(attController.text)
+                                                  .delete(),
+                                              db
+                                                  .collection('token_cadastro')
+                                                  .doc('token_cadastro')
+                                                  .update({"token": "2"}),
+                                              db
+                                                  .collection('token_cadastro')
+                                                  .doc('token_cadastro')
+                                                  .update({
+                                                "filename": attController.text
+                                              }),
+                                              Navigator.of(context).pop()
+                                            }
+                                          else
+                                            {
+                                              setState(() {
+                                                _displayText =
+                                                    'Usuário não encontrado!';
+                                              }),
+                                            }
+                                        });
+                              },
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: 5,
+                        ),
+                        Center(
+                          child: Text(
+                            _displayText,
+                            style: TextStyle(color: Colors.red),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                )
+              ],
+            );
+          },
+        );
+      },
+    );
+  }
+
+  Future<dynamic> RemoveWeb(BuildContext context) {
+    return showDialog(
+      context: context,
+      builder: (context) {
+        String contentText = "Content of Dialog";
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return AlertDialog(
+              title: Center(
+                  child: Text('Remoçao de Usuário',
+                      style: TextStyle(fontWeight: FontWeight.bold))),
+              actions: <Widget>[
+                // ignore: prefer_const_constructors
+                Center(
+                  child: Container(
+                    width: MediaQuery.of(context).size.width * 0.2,
+                    height: MediaQuery.of(context).size.width * 0.1,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      // ignore: prefer_const_literals_to_create_immutables
+                      children: [
+                        Text('Digite o nome do usuário'),
+                        TextField(
+                          autofocus: true,
+                          controller: attController,
+                          // ignore: prefer_const_constructors
+                          decoration: InputDecoration(
+                              border: InputBorder.none,
+                              // ignore: prefer_const_constructors
+                              icon: Icon(
+                                Icons.remove,
+                                color: Colors.red,
+                              ),
+                              hintText: 'Nome do usuário'),
+                        ),
+                        SizedBox(
+                          height: 15,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            TextButton(
+                              style: TextButton.styleFrom(
+                                  // backgroundColor: Color.fromARGB(255, 240, 217, 218),
+                                  // elevation: 20,
+                                  // shadowColor: Color.fromARGB(255, 243, 214, 214),
+                                  ),
+                              child: const Text(
+                                'Cancelar',
+                                style: TextStyle(color: Colors.black),
+                              ),
+                              onPressed: () {
+                                print(attController.text);
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                            TextButton(
+                              style: TextButton.styleFrom(
+                                backgroundColor:
+                                    Color.fromARGB(255, 243, 175, 177),
+                                elevation: 20,
+                                shadowColor: Color.fromARGB(255, 234, 158, 158),
+                              ),
+                              child: const Text(
+                                'Remover',
+                                style: TextStyle(color: Colors.black),
+                              ),
+                              onPressed: () {
+                                db
+                                    .collection("cadastros")
+                                    .doc(attController.text)
+                                    .get()
+                                    .then((docSnapshot) => {
+                                          if (docSnapshot.exists)
+                                            {
+                                              db
+                                                  .collection("cadastros")
+                                                  .doc(attController.text)
+                                                  .delete(),
+                                              db
+                                                  .collection('token_cadastro')
+                                                  .doc('token_cadastro')
+                                                  .update({"token": "2"}),
+                                              db
+                                                  .collection('token_cadastro')
+                                                  .doc('token_cadastro')
+                                                  .update({
+                                                "filename": attController.text
+                                              }),
+                                              Navigator.of(context).pop()
+                                            }
+                                          else
+                                            {
+                                              setState(() {
+                                                _displayText =
+                                                    'Usuário não encontrado!';
+                                              }),
+                                            }
+                                        });
+                              },
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: 5,
+                        ),
+                        Center(
+                          child: Text(
+                            _displayText,
+                            style: TextStyle(color: Colors.red),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                )
+              ],
+            );
+          },
+        );
+      },
+    );
   }
 }
 
@@ -558,6 +489,208 @@ Future<void> _dialogBuilder(
             child: Container(
               width: MediaQuery.of(context).size.width * 0.75,
               height: MediaQuery.of(context).size.width * 0.85,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                // ignore: prefer_const_literals_to_create_immutables
+                children: [
+                  TextField(
+                    autofocus: true,
+                    controller: nameController,
+                    decoration: InputDecoration(
+                        border: InputBorder.none,
+                        icon: Icon(
+                          Icons.person,
+                          color: Colors.green,
+                        ),
+                        hintText: 'Nome completo'),
+                  ),
+                  TextField(
+                    autofocus: true,
+                    controller: rgController,
+                    decoration: InputDecoration(
+                        border: InputBorder.none,
+                        icon: Icon(
+                          Icons.contact_mail,
+                          color: Colors.green,
+                        ),
+                        hintText: 'RG'),
+                  ),
+                  TextField(
+                    autofocus: true,
+                    controller: apController,
+                    // ignore: prefer_const_constructors
+                    decoration: InputDecoration(
+                        border: InputBorder.none,
+                        // ignore: prefer_const_constructors
+                        icon: Icon(
+                          Icons.door_front_door,
+                          color: Colors.green,
+                        ),
+                        hintText: 'AP'),
+                  ),
+                  TextField(
+                    autofocus: true,
+                    controller: cadastroController,
+                    decoration: InputDecoration(
+                        border: InputBorder.none,
+                        icon: Icon(
+                          Icons.people,
+                          color: Colors.green,
+                        ),
+                        hintText: 'Visitante ou Morador?'),
+                  ),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  Center(
+                    child: TextButton(
+                      style: TextButton.styleFrom(
+                        backgroundColor: Color.fromARGB(255, 210, 246, 210),
+                      ),
+                      // ignore: sort_child_properties_last
+                      child: const Text(
+                        'Carregar a imagem',
+                        style: TextStyle(
+                          color: Colors.black,
+                        ),
+                      ),
+                      onPressed: () async {
+                        FilePickerResult? result =
+                            await FilePicker.platform.pickFiles();
+
+                        if (result != null) {
+                          Uint8List? fileBytes = result.files.first.bytes;
+                          String fileName = result.files.first.name;
+
+                          Uint8List? resizedData = fileBytes;
+                          IMG.Image? img = IMG.decodeImage(resizedData!);
+                          IMG.Image resized =
+                              IMG.copyResize(img!, width: 600, height: 800);
+                          resizedData = IMG.encodeJpg(resized);
+
+                          showDialog<void>(
+                            context: context,
+                            //barrierDismissible: false, // user must tap button!
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                  title: Text('Carregando...'),
+                                  content: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      Container(
+                                        width: 30,
+                                        height: 30,
+                                        child: CircularProgressIndicator(
+                                          //backgroundColor: Colors.green,
+                                          valueColor:
+                                              AlwaysStoppedAnimation<Color>(
+                                                  Colors.green),
+                                        ),
+                                      ),
+                                    ],
+                                  ));
+                            },
+                          );
+
+                          await storageRef.child(nameController.text).putData(
+                              resizedData!,
+                              SettableMetadata(
+                                contentType: "image/jpeg",
+                              ));
+
+                          Navigator.of(context, rootNavigator: true).pop();
+
+                          link = await storageRef
+                              .child(nameController.text)
+                              .getDownloadURL();
+                        }
+                      },
+                    ),
+                  ),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      TextButton(
+                        style: TextButton.styleFrom(
+                          textStyle: Theme.of(context).textTheme.labelLarge,
+                        ),
+                        child: const Text(
+                          'Cancelar',
+                          selectionColor: Colors.green,
+                        ),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                      TextButton(
+                        style: TextButton.styleFrom(
+                          textStyle: Theme.of(context).textTheme.labelLarge,
+                        ),
+                        child: const Text('Cadastrar'),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+
+                          db
+                              .collection('token_cadastro')
+                              .doc('token_cadastro')
+                              .update({"token": "1"});
+
+                          final data = <String, String>{
+                            "nome": nameController.text,
+                            "foto": link,
+                            "ap": apController.text,
+                            "cadastro": cadastroController.text,
+                            "rg": rgController.text,
+                          };
+                          db
+                              .collection("cadastros")
+                              .doc(nameController.text)
+                              .set(data, SetOptions(merge: true));
+                        },
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          )
+        ],
+      );
+    },
+  );
+}
+
+Future<void> _dialogBuilderWeb(
+  BuildContext context,
+  Reference storageRef,
+  TextEditingController nameController,
+  TextEditingController rgController,
+  TextEditingController cadastroController,
+  TextEditingController apController,
+  FirebaseFirestore db,
+  String link,
+) {
+  return showDialog<void>(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Center(
+            child: Text('Novo Cadastro',
+                style: TextStyle(fontWeight: FontWeight.bold))),
+        actions: <Widget>[
+          // ignore: prefer_const_constructors
+
+          Center(
+            child: Container(
+              width: MediaQuery.of(context).size.width * 0.35,
+              height: MediaQuery.of(context).size.width * 0.2,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.start,

@@ -90,6 +90,44 @@ class HistoryWebPage extends StatefulWidget {
 class _HistoryWebPageState extends State<HistoryWebPage> {
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return MaterialApp(
+        home: Scaffold(
+      //extendBodyBehindAppBar: true,
+      appBar: AppBar(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(
+              bottom: Radius.circular(30),
+            ),
+          ),
+          title: Text(
+            'Historico',
+            style: TextStyle(
+              decoration: TextDecoration.none,
+              color: Colors.black,
+            ),
+          ),
+          centerTitle: true,
+          //backgroundColor: Colors.transparent,
+          backgroundColor: Colors.green,
+          elevation: 0.0,
+          iconTheme: const IconThemeData(color: Colors.black)),
+
+      drawer: Drawer(
+        child: DrawerTemplate(),
+      ),
+      body: Center(
+          child: Column(
+        children: [
+          Expanded(
+            child: Container(
+                color: Colors.white,
+                width: MediaQuery.of(context).size.width * 0.8,
+                //height: MediaQuery.of(context).size.height * 0.8,
+                child: HistoryInformation()),
+          )
+          //SizedBox(height: 30),
+        ],
+      )),
+    ));
   }
 }
