@@ -56,7 +56,7 @@ class _HistoryMobilePageState extends State<HistoryMobilePage> {
           ),
           centerTitle: true,
           //backgroundColor: Colors.transparent,
-          backgroundColor: Colors.green,
+          backgroundColor: Color.fromARGB(255, 149, 228, 167),
           elevation: 0.0,
           iconTheme: const IconThemeData(color: Colors.black)),
 
@@ -100,15 +100,17 @@ class _HistoryWebPageState extends State<HistoryWebPage> {
             ),
           ),
           title: Text(
-            'Historico',
+            'Histórico',
             style: TextStyle(
               decoration: TextDecoration.none,
+              fontWeight: FontWeight.bold,
+              fontSize: 20,
               color: Colors.black,
             ),
           ),
           centerTitle: true,
           //backgroundColor: Colors.transparent,
-          backgroundColor: Colors.green,
+          backgroundColor: Color.fromARGB(255, 149, 228, 167),
           elevation: 0.0,
           iconTheme: const IconThemeData(color: Colors.black)),
 

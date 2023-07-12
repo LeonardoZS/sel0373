@@ -55,7 +55,7 @@ class _DrawerTemplateState extends State<DrawerTemplate> {
                 // ignore: prefer_const_constructors
                 UserAccountsDrawerHeader(
                   decoration: const BoxDecoration(
-                    color: Colors.green,
+                    color: Color.fromARGB(255, 149, 228, 167),
                   ),
                   accountName: Text(
                     nome,

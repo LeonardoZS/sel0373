@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, sort_child_properties_last
 
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/services.dart';
 import 'package:sel0373/login_page/authentication.dart';
 import 'package:sel0373/mycadastro_page/gerenciar_cadastros.dart';
@@ -19,6 +20,7 @@ class HomePage extends StatelessWidget {
   final Stream<QuerySnapshot> _usersStream = FirebaseFirestore.instance
       .collection('request')
       .where('view', isEqualTo: 'false')
+      .limit(1)
       .snapshots();
 
   CollectionReference collectionReference =
@@ -29,6 +31,8 @@ class HomePage extends StatelessWidget {
 
   CollectionReference collectionRequest =
       FirebaseFirestore.instance.collection('request');
+
+  int flag = 1;
 
   @override
   Widget build(BuildContext context) {
@@ -45,11 +49,13 @@ class HomePage extends StatelessWidget {
             'Home',
             style: TextStyle(
               decoration: TextDecoration.none,
+              fontWeight: FontWeight.bold,
+              fontSize: 20,
               color: Colors.black,
             ),
           ),
           centerTitle: true,
-          backgroundColor: Colors.green,
+          backgroundColor: Color.fromARGB(255, 149, 228, 167),
           elevation: 0.0,
           iconTheme: const IconThemeData(color: Colors.black)),
       drawer: Drawer(
@@ -60,24 +66,224 @@ class HomePage extends StatelessWidget {
           usersStream: _usersStream,
           collectionRequest: collectionRequest,
           collectionReference: collectionReference,
-          collectionHistory: collectionHistory),
+          collectionHistory: collectionHistory,
+          flag: flag),
     ));
   }
 }
 
+class Builder extends StatefulWidget {
+  Builder({
+    super.key,
+    required this.usersStream,
+    required this.collectionRequest,
+    required this.collectionReference,
+    required this.collectionHistory,
+    required int flag,
+  });
+
+  final Stream<QuerySnapshot<Object?>> usersStream;
+  final CollectionReference<Object?> collectionRequest;
+  final CollectionReference<Object?> collectionReference;
+  final CollectionReference<Object?> collectionHistory;
+  int flag = 1;
+
+  @override
+  State<Builder> createState() => _BuilderState();
+}
+
+class _BuilderState extends State<Builder> {
+  late int flag;
+
+  @override
+  void didChangeDependencies() {
+    print("No did");
+    flag = 1;
+    super.didChangeDependencies();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    print("No build");
+    print(flag);
+    return Column(
+      children: [
+        StreamBuilder<QuerySnapshot>(
+          stream: widget.usersStream,
+          builder:
+              (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+            print("Att snapshot");
+            if (snapshot.hasError) {
+              return const Text('Something went wrong');
+            }
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Text("Loading");
+            }
+            if (snapshot.data!.docs.isEmpty) {
+              return Container();
+            } else {
+              final player = AudioPlayer();
+              player.play(UrlSource('assets/audio/SomCUT2.mp3'));
+              int? i = snapshot.data?.docs.length;
+              Map<String, dynamic> map =
+                  snapshot.data?.docs[(i! - 1)].data() as Map<String, dynamic>;
+
+              String uid = snapshot.data?.docs.last.id as String;
+
+              print(uid);
+              print(flag);
+              print('-------');
+
+              if (flag == 1) {
+                flag = 0;
+
+                Future(() => showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: Center(
+                            child: Text(
+                              'Requisição de entrada',
+                              style: TextStyle(
+                                decoration: TextDecoration.none,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18,
+                                color: Colors.black,
+                              ),
+                            ),
+                          ),
+                          actions: [
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                ClipRRect(
+                                  borderRadius:
+                                      BorderRadius.circular(20), // Image border
+                                  child: SizedBox.fromSize(
+                                    size: Size.fromRadius(120), // Image radius
+                                    child: Image.network(map['foto'],
+                                        fit: BoxFit.cover),
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    TextButton(
+                                      child: Text(
+                                        'Aceitar',
+                                        style: TextStyle(
+                                          decoration: TextDecoration.none,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 12,
+                                          color: Colors.black,
+                                        ),
+                                      ),
+                                      style: TextButton.styleFrom(
+                                        backgroundColor: Colors.green,
+                                        elevation: 5,
+                                        shadowColor:
+                                            Color.fromARGB(255, 214, 223, 203),
+                                      ),
+                                      onPressed: () {
+                                        flag = 1;
+                                        widget.collectionRequest
+                                            .doc(uid)
+                                            .update({
+                                          'view': 'true',
+                                        });
+
+                                        widget.collectionReference
+                                            .doc('token_abertura')
+                                            .update({
+                                          'token': '1',
+                                        });
+
+                                        final data = <String, String>{
+                                          "nome": map['nome'],
+                                          "foto": map['foto'],
+                                          "time": map['time'],
+                                          "date": map['date'],
+                                        };
+
+                                        widget.collectionHistory
+                                            .doc()
+                                            .set(data, SetOptions(merge: true));
+
+                                        Navigator.of(context).pop();
+                                      },
+                                    ),
+                                    TextButton(
+                                      child: Text(
+                                        'Negar',
+                                        style: TextStyle(
+                                          decoration: TextDecoration.none,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 12,
+                                          color: Colors.black,
+                                        ),
+                                      ),
+                                      style: TextButton.styleFrom(
+                                        backgroundColor: Colors.red,
+                                        elevation: 5,
+                                        shadowColor: Colors.red,
+                                      ),
+                                      onPressed: () {
+                                        flag = 1;
+                                        widget.collectionRequest
+                                            .doc(uid)
+                                            .update({
+                                          'view': 'true',
+                                        });
+                                        Navigator.of(context).pop();
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ],
+                        );
+                      },
+                    ));
+              } else {}
+
+              return Container();
+            }
+          },
+        ),
+        Expanded(
+          child: HomePageReal(),
+        )
+      ],
+    );
+  }
+}
+
+/*
+
 class Builder extends StatelessWidget {
-  const Builder({
+  // var collectionToken;
+
+  Builder({
     super.key,
     required Stream<QuerySnapshot<Object?>> usersStream,
     required this.collectionRequest,
     required this.collectionReference,
     required this.collectionHistory,
+    required int flag,
   }) : _usersStream = usersStream;
 
   final Stream<QuerySnapshot<Object?>> _usersStream;
   final CollectionReference<Object?> collectionRequest;
   final CollectionReference<Object?> collectionReference;
   final CollectionReference<Object?> collectionHistory;
+  int flag = 1;
 
   @override
   Widget build(BuildContext context) {
@@ -97,119 +303,129 @@ class Builder extends StatelessWidget {
               return Container();
             } else {
               int? i = snapshot.data?.docs.length;
-
               Map<String, dynamic> map =
                   snapshot.data?.docs[(i! - 1)].data() as Map<String, dynamic>;
 
               String uid = snapshot.data?.docs.last.id as String;
 
-              collectionRequest.doc(uid).update({
-                'view': 'true',
-              });
-
               print(uid);
+              print(flag);
+              print('-------');
 
-              Future(() => showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return AlertDialog(
-                        title: Center(
-                          child: Text(
-                            'Requisição de entrada',
-                            style: TextStyle(
-                              decoration: TextDecoration.none,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 18,
-                              color: Colors.black,
+              if (flag == 1) {
+                flag = 0;
+
+                Future(() => showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: Center(
+                            child: Text(
+                              'Requisição de entrada',
+                              style: TextStyle(
+                                decoration: TextDecoration.none,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18,
+                                color: Colors.black,
+                              ),
                             ),
                           ),
-                        ),
-                        actions: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              ClipRRect(
-                                borderRadius:
-                                    BorderRadius.circular(20), // Image border
-                                child: SizedBox.fromSize(
-                                  size: Size.fromRadius(120), // Image radius
-                                  child: Image.network(map['foto'],
-                                      fit: BoxFit.cover),
+                          actions: [
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                ClipRRect(
+                                  borderRadius:
+                                      BorderRadius.circular(20), // Image border
+                                  child: SizedBox.fromSize(
+                                    size: Size.fromRadius(120), // Image radius
+                                    child: Image.network(map['foto'],
+                                        fit: BoxFit.cover),
+                                  ),
                                 ),
-                              ),
-                              SizedBox(
-                                height: 10,
-                              ),
-                              Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  TextButton(
-                                    child: Text(
-                                      'Aceitar',
-                                      style: TextStyle(
-                                        decoration: TextDecoration.none,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 12,
-                                        color: Colors.black,
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    TextButton(
+                                      child: Text(
+                                        'Aceitar',
+                                        style: TextStyle(
+                                          decoration: TextDecoration.none,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 12,
+                                          color: Colors.black,
+                                        ),
                                       ),
-                                    ),
-                                    style: TextButton.styleFrom(
-                                      backgroundColor: Colors.green,
-                                      elevation: 5,
-                                      shadowColor:
-                                          Color.fromARGB(255, 214, 223, 203),
-                                    ),
-                                    onPressed: () {
-                                      collectionReference
-                                          .doc('token_abertura')
-                                          .update({
-                                        'token': '1',
-                                      });
-
-                                      final data = <String, String>{
-                                        "nome": map['nome'],
-                                        "foto": map['foto'],
-                                        "time": map['time'],
-                                        "date": map['date'],
-                                      };
-
-                                      collectionHistory
-                                          .doc()
-                                          .set(data, SetOptions(merge: true));
-
-                                      Navigator.of(context).pop();
-                                    },
-                                  ),
-                                  TextButton(
-                                    child: Text(
-                                      'Negar',
-                                      style: TextStyle(
-                                        decoration: TextDecoration.none,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 12,
-                                        color: Colors.black,
+                                      style: TextButton.styleFrom(
+                                        backgroundColor: Colors.green,
+                                        elevation: 5,
+                                        shadowColor:
+                                            Color.fromARGB(255, 214, 223, 203),
                                       ),
+                                      onPressed: () {
+                                        flag = 1;
+                                        collectionRequest.doc(uid).update({
+                                          'view': 'true',
+                                        });
+
+                                        collectionReference
+                                            .doc('token_abertura')
+                                            .update({
+                                          'token': '1',
+                                        });
+
+                                        final data = <String, String>{
+                                          "nome": map['nome'],
+                                          "foto": map['foto'],
+                                          "time": map['time'],
+                                          "date": map['date'],
+                                        };
+
+                                        collectionHistory
+                                            .doc()
+                                            .set(data, SetOptions(merge: true));
+
+                                        Navigator.of(context).pop();
+                                      },
                                     ),
-                                    style: TextButton.styleFrom(
-                                      backgroundColor: Colors.red,
-                                      elevation: 5,
-                                      shadowColor: Colors.red,
+                                    TextButton(
+                                      child: Text(
+                                        'Negar',
+                                        style: TextStyle(
+                                          decoration: TextDecoration.none,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 12,
+                                          color: Colors.black,
+                                        ),
+                                      ),
+                                      style: TextButton.styleFrom(
+                                        backgroundColor: Colors.red,
+                                        elevation: 5,
+                                        shadowColor: Colors.red,
+                                      ),
+                                      onPressed: () {
+                                        flag = 1;
+                                        collectionRequest.doc(uid).update({
+                                          'view': 'true',
+                                        });
+                                        Navigator.of(context).pop();
+                                      },
                                     ),
-                                    onPressed: () {
-                                      Navigator.of(context).pop();
-                                    },
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ],
-                      );
-                    },
-                  ));
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ],
+                        );
+                      },
+                    ));
+              } else {}
 
               return Container();
             }
@@ -222,7 +438,7 @@ class Builder extends StatelessWidget {
     );
   }
 }
-
+*/
 class HomePageReal extends StatelessWidget {
   const HomePageReal({super.key});
 

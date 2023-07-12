@@ -44,6 +44,7 @@ dependencies:
   firebase_auth: ^4.6.1
   flutterfire_ui: ^0.4.3+20
   image: ^4.0.17
+  audioplayers: ^4.1.0
 
 dev_dependencies:
   flutter_test:
@@ -73,6 +74,7 @@ flutter:
     - assets/images/
     #- assets/icons
     - assets/fonts/
+    - assets/audio/
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
 

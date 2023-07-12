@@ -28,15 +28,15 @@ class _GerenciarCadastrosState extends State<GerenciarCadastros> {
   final TextEditingController attController = TextEditingController();
   String _displayText = '';
 
-  void _updateDisplayText() {
-    setState(() {
-      _displayText = attController.text;
-    });
-  }
+  // void _updateDisplayText() {
+  //   setState(() {
+  //     _displayText = '';
+  //   });
+  // }
 
   void initState() {
     super.initState();
-    attController.addListener(_updateDisplayText);
+    //attController.addListener(_updateDisplayText);
   }
 
   final FirebaseFirestore db = FirebaseFirestore.instance;
@@ -78,12 +78,14 @@ class _GerenciarCadastrosState extends State<GerenciarCadastros> {
             'Meus Cadastros',
             style: TextStyle(
               decoration: TextDecoration.none,
+              fontWeight: FontWeight.bold,
+              fontSize: 20,
               color: Colors.black,
             ),
           ),
           centerTitle: true,
           //backgroundColor: Colors.transparent,
-          backgroundColor: Colors.green,
+          backgroundColor: Color.fromARGB(255, 149, 228, 167),
           elevation: 0.0,
           iconTheme: const IconThemeData(color: Colors.black)),
 
@@ -213,6 +215,10 @@ class _GerenciarCadastrosState extends State<GerenciarCadastros> {
   }
 
   Future<dynamic> RemoveMobile(BuildContext context) {
+    Map<String, dynamic> data;
+    final storageRef = FirebaseStorage.instance;
+    final Map<String, dynamic> dataupdate;
+    String link;
     return showDialog(
       context: context,
       builder: (context) {
@@ -266,7 +272,7 @@ class _GerenciarCadastrosState extends State<GerenciarCadastros> {
                                 style: TextStyle(color: Colors.black),
                               ),
                               onPressed: () {
-                                print(attController.text);
+                                _displayText = '';
                                 Navigator.of(context).pop();
                               },
                             ),
@@ -286,23 +292,29 @@ class _GerenciarCadastrosState extends State<GerenciarCadastros> {
                                     .collection("cadastros")
                                     .doc(attController.text)
                                     .get()
-                                    .then((docSnapshot) => {
+                                    .then((docSnapshot) async => {
                                           if (docSnapshot.exists)
                                             {
+                                              data = docSnapshot.data()!,
+                                              link = data['foto'],
+                                              await storageRef
+                                                  .ref()
+                                                  .child(link)
+                                                  .delete(),
+                                              await db
+                                                  .collection('token_cadastro')
+                                                  .doc('nome_pessoa')
+                                                  .update({
+                                                "filename": attController.text
+                                              }),
+                                              db
+                                                  .collection('token_cadastro')
+                                                  .doc('token_cadastro')
+                                                  .update({"token": '2'}),
                                               db
                                                   .collection("cadastros")
                                                   .doc(attController.text)
                                                   .delete(),
-                                              db
-                                                  .collection('token_cadastro')
-                                                  .doc('token_cadastro')
-                                                  .update({"token": "2"}),
-                                              db
-                                                  .collection('token_cadastro')
-                                                  .doc('token_cadastro')
-                                                  .update({
-                                                "filename": attController.text
-                                              }),
                                               Navigator.of(context).pop()
                                             }
                                           else
@@ -339,6 +351,11 @@ class _GerenciarCadastrosState extends State<GerenciarCadastros> {
   }
 
   Future<dynamic> RemoveWeb(BuildContext context) {
+    Map<String, dynamic> data;
+    final storageRef = FirebaseStorage.instance;
+    final Map<String, dynamic> dataupdate;
+    // final desertRef = storageRef.child("cadastro/");
+    String link;
     return showDialog(
       context: context,
       builder: (context) {
@@ -392,7 +409,7 @@ class _GerenciarCadastrosState extends State<GerenciarCadastros> {
                                 style: TextStyle(color: Colors.black),
                               ),
                               onPressed: () {
-                                print(attController.text);
+                                _displayText = '';
                                 Navigator.of(context).pop();
                               },
                             ),
@@ -412,23 +429,29 @@ class _GerenciarCadastrosState extends State<GerenciarCadastros> {
                                     .collection("cadastros")
                                     .doc(attController.text)
                                     .get()
-                                    .then((docSnapshot) => {
+                                    .then((docSnapshot) async => {
                                           if (docSnapshot.exists)
                                             {
+                                              data = docSnapshot.data()!,
+                                              link = data['foto'],
+                                              await storageRef
+                                                  .ref()
+                                                  .child(link)
+                                                  .delete(),
+                                              await db
+                                                  .collection('token_cadastro')
+                                                  .doc('nome_pessoa')
+                                                  .update({
+                                                "filename": attController.text
+                                              }),
+                                              db
+                                                  .collection('token_cadastro')
+                                                  .doc('token_cadastro')
+                                                  .update({"token": '2'}),
                                               db
                                                   .collection("cadastros")
                                                   .doc(attController.text)
                                                   .delete(),
-                                              db
-                                                  .collection('token_cadastro')
-                                                  .doc('token_cadastro')
-                                                  .update({"token": "2"}),
-                                              db
-                                                  .collection('token_cadastro')
-                                                  .doc('token_cadastro')
-                                                  .update({
-                                                "filename": attController.text
-                                              }),
                                               Navigator.of(context).pop()
                                             }
                                           else

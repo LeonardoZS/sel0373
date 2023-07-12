@@ -7,6 +7,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class HomeMobilePage extends StatelessWidget {
   HomeMobilePage({super.key});
 
+  late String reconhecimentoCount;
+  late String cadastrosCount;
+
   final FirebaseFirestore db = FirebaseFirestore.instance;
   void _permiteAcesso() {
     final washingtonRef = db.collection("video").doc("pessoa");
@@ -113,13 +116,16 @@ class HomeMobilePage extends StatelessWidget {
                               color: Colors.black,
                             ),
                           )),
-                      Text(
-                        'Sem requisições de entrada \nno momento',
-                        style: TextStyle(
-                          decoration: TextDecoration.none,
-                          //fontWeight: FontWeight.bold,
-                          fontSize: 15,
-                          color: Colors.black,
+                      Center(
+                        child: Text(
+                          'Sem requisições de entrada\nno momento',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            decoration: TextDecoration.none,
+                            //fontWeight: FontWeight.bold,
+                            fontSize: 15,
+                            color: Colors.black,
+                          ),
                         ),
                       )
                     ],
@@ -163,39 +169,53 @@ class HomeMobilePage extends StatelessWidget {
               color: Color.fromARGB(255, 185, 191, 244),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  SizedBox(width: MediaQuery.of(context).size.width * 0.07),
+                  // SizedBox(width: MediaQuery.of(context).size.width * 0.07),
+                  StreamBuilder<QuerySnapshot>(
+                      stream: db.collection('cadastros').snapshots(),
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          cadastrosCount =
+                              snapshot.data!.docs.length.toString();
+                        } else {
+                          cadastrosCount = '0';
+                        }
+                        return Container(
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(10),
+                                  topRight: Radius.circular(10),
+                                  bottomLeft: Radius.circular(10),
+                                  bottomRight: Radius.circular(10),
+                                )),
+                            height: altura / 8,
+                            width: altura / 8,
+                            child: Center(
+                              child: Text(
+                                cadastrosCount,
+                                style: TextStyle(
+                                  decoration: TextDecoration.none,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 30,
+                                  color: Color.fromARGB(255, 42, 58, 204),
+                                ),
+                              ),
+                            ));
+                      }),
+                  //SizedBox(width: MediaQuery.of(context).size.width * 0.07),
                   Container(
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(10),
-                            topRight: Radius.circular(10),
-                            bottomLeft: Radius.circular(10),
-                            bottomRight: Radius.circular(10),
-                          )),
-                      height: altura / 8,
-                      width: altura / 8,
-                      child: Center(
-                        child: Text(
-                          '64',
-                          style: TextStyle(
-                            decoration: TextDecoration.none,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 30,
-                            color: Color.fromARGB(255, 185, 191, 244),
-                          ),
-                        ),
-                      )),
-                  SizedBox(width: MediaQuery.of(context).size.width * 0.07),
-                  Text(
-                    'Cadastros\nrealizados',
-                    style: TextStyle(
-                      decoration: TextDecoration.none,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 25,
-                      color: Colors.black,
+                    width: 175,
+                    child: Text(
+                      'Usuários\ncadastrados',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        decoration: TextDecoration.none,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 25,
+                        color: Colors.black,
+                      ),
                     ),
                   ),
                 ],
@@ -208,39 +228,54 @@ class HomeMobilePage extends StatelessWidget {
               color: Color.fromARGB(255, 226, 254, 213),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  SizedBox(width: MediaQuery.of(context).size.width * 0.07),
+                  //SizedBox(width: MediaQuery.of(context).size.width * 0.07),
+                  StreamBuilder<QuerySnapshot>(
+                      stream: db.collection('video').snapshots(),
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          reconhecimentoCount =
+                              snapshot.data!.docs.length.toString();
+                        } else {
+                          reconhecimentoCount = '0';
+                        }
+
+                        return Container(
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(10),
+                                  topRight: Radius.circular(10),
+                                  bottomLeft: Radius.circular(10),
+                                  bottomRight: Radius.circular(10),
+                                )),
+                            height: altura / 8,
+                            width: altura / 8,
+                            child: Center(
+                              child: Text(
+                                reconhecimentoCount,
+                                style: TextStyle(
+                                  decoration: TextDecoration.none,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 30,
+                                  color: Color.fromARGB(255, 48, 123, 13),
+                                ),
+                              ),
+                            ));
+                      }),
+                  //SizedBox(width: MediaQuery.of(context).size.width * 0.07),
                   Container(
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(10),
-                            topRight: Radius.circular(10),
-                            bottomLeft: Radius.circular(10),
-                            bottomRight: Radius.circular(10),
-                          )),
-                      height: altura / 8,
-                      width: altura / 8,
-                      child: Center(
-                        child: Text(
-                          '13',
-                          style: TextStyle(
-                            decoration: TextDecoration.none,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 30,
-                            color: Color.fromARGB(255, 48, 123, 13),
-                          ),
-                        ),
-                      )),
-                  SizedBox(width: MediaQuery.of(context).size.width * 0.07),
-                  Text(
-                    'Reconhecimentos\nrealizados',
-                    style: TextStyle(
-                      decoration: TextDecoration.none,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 25,
-                      color: Colors.black,
+                    width: 175,
+                    child: Text(
+                      'Acessos\npermitidos',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        decoration: TextDecoration.none,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 25,
+                        color: Colors.black,
+                      ),
                     ),
                   ),
                 ],
