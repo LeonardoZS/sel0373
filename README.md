@@ -6,13 +6,13 @@ Repositório referente ao projeto final da disciplina de **IoT (INTERNET OF THIN
 
 O projeto realizado para para a disciplina foi um **porteiro eletrônico com reconhecimento facial**. Para tal, utilizou-se uma *Raspberry Pi 4* como *hardware* embarcado. Já para o sistema de interface de usuário, utilizou-se o *Flutter* para confecção do sistema WEB.
 
-##APRESENTAÇÃO
+## APRESENTAÇÃO
 
 Segue abaixo o link referente a apresentação que ilustra os equipamentos utilizados, implementações realizadas e o esquema de comunicação adotado.
 
 [*Apresentação - IOT*](https://docs.google.com/presentation/d/1V8DTw_TA2eZbSbMBqUk4iPKVVDjOXhiXsLJS1iZbnnc/edit?pli=1)
 
-##SITE
+## SITE
 
 O site do projeto final pode ser acessado por do link abaixo
 
@@ -21,7 +21,7 @@ O site do projeto final pode ser acessado por do link abaixo
 - Login: 
 - Senha:
 
-##RASPBERRY
+## RASPBERRY
 
 - Pasta *Reconhecimento* contém todos os arquivos necessários;
 - Requirements.txt disponível no repositório;
@@ -31,7 +31,7 @@ O site do projeto final pode ser acessado por do link abaixo
 
 Instalação de todas as bibliotecas do firebase na *raspberry* pode dar problema, pois não há suporte oficial para esta plataforma.
 
-##Observação
+## OBSERVAÇÃO
 
 Ademais, vale ressaltar que por questões de segurança, alguns arquivos e credenciais envolvendo o firebase foram retirados quando o repositório se tornou publico. Isto foi feito para manter a integridade do projeto, a fim de evitar eventuais exposições de dados.Caso seja necessário, mande email para algum dos integrantes do grupo para a versão com as credenciais.
 
@@ -39,7 +39,9 @@ Ademais, vale ressaltar que por questões de segurança, alguns arquivos e crede
 - domingues.gabriel@usp.br
 - brunopsant@usp.br
 
-# Documentação
+## DOCUMENTAÇÃO
+
+Algumas documentações que podem ser úteis:
 
 - [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
 - [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
