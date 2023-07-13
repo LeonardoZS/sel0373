@@ -16,7 +16,7 @@ Segue disposto abaixo o link referente a apresentação que ilustra os equipamen
 O site do projeto final pode ser acessado por do link abaixo
 
 
-*link*
+[*link*](https://porteiroeletronico-sel0373.web.app/)
 
 Ademais, vale ressaltar que por questões de segurança, alguns arquivos e credenciais envolvendo o firebase foram retirados quando o repositório se tornou publico. Isto foi feito para manter a integridade do projeto, a fim de evitar eventuais exposições de dados.
 Caso seja necessário, mande email para algum dos integrantes do grupo para a versão com as credenciais.
@@ -30,11 +30,9 @@ leonardozaniboni@usp.br
 
 
 
-# Documentações relevantes
+# Documentação
 
 - [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
 - [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+- [Firebase Documentation](https://firebase.google.com/docs?hl=pt)
+- [Face recognition](https://pypi.org/project/face-recognition/)
