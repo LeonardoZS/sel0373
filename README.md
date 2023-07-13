@@ -16,7 +16,7 @@ Segue disposto abaixo o link referente a apresentação que ilustra os equipamen
 O site do projeto final pode ser acessado por do link abaixo
 
 
-[*link*](https://porteiroeletronico-sel0373.web.app/)
+[*Site - versão final*](https://porteiroeletronico-sel0373.web.app/)
 
 Ademais, vale ressaltar que por questões de segurança, alguns arquivos e credenciais envolvendo o firebase foram retirados quando o repositório se tornou publico. Isto foi feito para manter a integridade do projeto, a fim de evitar eventuais exposições de dados.
 Caso seja necessário, mande email para algum dos integrantes do grupo para a versão com as credenciais.
