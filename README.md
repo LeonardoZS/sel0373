@@ -10,7 +10,7 @@ O projeto realizado é de um **porteiro eletrônico com reconhecimento facial**.
 
 Segue disposto abaixo o link referente a apresentação que ilustra os equipamentos utilizados, implementações realizadas e o esquema de comunicação adotado.
 
-*link*
+[*Apresentação - IOT*](https://docs.google.com/presentation/d/1V8DTw_TA2eZbSbMBqUk4iPKVVDjOXhiXsLJS1iZbnnc/edit?pli=1)
 
 
 O site do projeto final pode ser acessado por do link abaixo
