@@ -23,10 +23,10 @@ O site do projeto final pode ser acessado por do link abaixo
 
 ## RASPBERRY
 
-- Pasta *Reconhecimento* contém todos os arquivos necessários;
-- Requirements.txt disponível no repositório;
-- Instalação da biblioteca face-recognition:[*raspberry pi*](https://gist.github.com/ageitgey/1ac8dbe8572f3f533df6269dab35df65);
-- Manter key.json na mesma pasta que porteiro.py;
+- Pasta *Reconhecimento* contém todos os arquivos necessários
+- Requirements.txt disponível no repositório
+- Instalação da biblioteca face-recognition: [*raspberry pi*](https://gist.github.com/ageitgey/1ac8dbe8572f3f533df6269dab35df65);
+- Manter key.json na mesma pasta que porteiro.py
 - Para executar o código: python3 ./forever.py porteiro.py --cpu -1
 
 Instalação de todas as bibliotecas do firebase na *raspberry* pode dar problema, pois não há suporte oficial para esta plataforma.
