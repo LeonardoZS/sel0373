@@ -18,8 +18,8 @@ O site do projeto final pode ser acessado por do link abaixo
 
 [*Site - versão final*](https://porteiroeletronico-sel0373.web.app/)
 
-- Login: 
-- Senha:
+- Login: anonimosel0373@gmail.com
+- Senha: anonimo
 
 ## RASPBERRY
 
