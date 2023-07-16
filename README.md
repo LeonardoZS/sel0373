@@ -35,9 +35,9 @@ Instalação de todas as bibliotecas do firebase na *raspberry* pode dar problem
 
 Ademais, vale ressaltar que por questões de segurança, alguns arquivos e credenciais envolvendo o firebase foram retirados quando o repositório se tornou publico. Isto foi feito para manter a integridade do projeto, a fim de evitar eventuais exposições de dados.Caso seja necessário, mande email para algum dos integrantes do grupo para a versão com as credenciais.
 
-- leonardozaniboni@usp.br
-- domingues.gabriel@usp.br
-- brunopsant@usp.br
+- leonardozaniboni@usp.br   (11801049)
+- domingues.gabriel@usp.br   (11800903)
+- brunopsant@usp.br  (11819507)
 
 ## DOCUMENTAÇÃO
 
